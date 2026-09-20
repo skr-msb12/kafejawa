@@ -1,0 +1,2208 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>POS KafeJawa - Dokumen Perencanaan & Desain Database (Tahap 1)</title>
+<style>
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: "Cascadia Code", "Consolas", "Courier New", monospace;
+  --color-primary: #0f172a;
+  --color-primary-light: #1e293b;
+  --color-secondary: #334155;
+  --color-accent: #1d4ed8;
+  --color-accent-soft: #eff6ff;
+  --color-border: #cbd5e1;
+  --color-border-subtle: #e2e8f0;
+  --color-bg-light: #f8fafc;
+  --color-bg-card: #ffffff;
+  --color-text: #0f172a;
+  --color-text-muted: #475569;
+  --radius-sm: 2px;
+  --radius-md: 3px;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #f1f5f9;
+  color: var(--color-text);
+  line-height: 1.5;
+  font-size: 10.5pt;
+  -webkit-font-smoothing: antialiased;
+}
+
+.document-container {
+  max-width: 210mm;
+  margin: 20px auto;
+  background-color: var(--color-bg-card);
+  padding: 20mm 15mm;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.cover-page {
+  min-height: 250mm;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 20mm;
+}
+
+.cover-header {
+  border-left: 6px solid var(--color-primary);
+  padding-left: 20px;
+  margin-top: 30mm;
+}
+
+.cover-tag {
+  display: inline-block;
+  background-color: var(--color-primary);
+  color: #ffffff;
+  font-size: 9pt;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 15px;
+}
+
+.cover-title {
+  font-size: 26pt;
+  font-weight: 900;
+  line-height: 1.15;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+  margin-bottom: 12px;
+}
+
+.cover-subtitle {
+  font-size: 13pt;
+  font-weight: 500;
+  color: var(--color-secondary);
+  line-height: 1.4;
+}
+
+.cover-meta-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  background-color: var(--color-bg-light);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  margin-top: 40mm;
+}
+
+.meta-item h4 {
+  font-size: 8.5pt;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-text-muted);
+  margin-bottom: 4px;
+}
+
+.meta-item p {
+  font-size: 10.5pt;
+  font-weight: 600;
+  color: var(--color-primary);
+}
+
+.cover-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid var(--color-border-subtle);
+  padding-top: 15px;
+  font-size: 9pt;
+  color: var(--color-text-muted);
+}
+
+.section-block {
+  margin-top: 25mm;
+}
+
+.section-header {
+  border-bottom: 2px solid var(--color-primary);
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.section-number {
+  font-size: 14pt;
+  font-weight: 900;
+  color: var(--color-accent);
+  margin-right: 8px;
+}
+
+.section-title {
+  font-size: 14pt;
+  font-weight: 800;
+  color: var(--color-primary);
+  letter-spacing: -0.3px;
+}
+
+.subsection-title {
+  font-size: 11.5pt;
+  font-weight: 700;
+  color: var(--color-primary-light);
+  margin: 16px 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+p {
+  margin-bottom: 10px;
+  color: #1e293b;
+  text-align: justify;
+}
+
+ul, ol {
+  margin: 8px 0 12px 20px;
+  color: #1e293b;
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 12px 0 18px 0;
+  font-size: 9pt;
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+}
+
+.data-table th {
+  background-color: var(--color-primary-light);
+  color: #ffffff;
+  font-weight: 700;
+  text-align: left;
+  padding: 8px 10px;
+  border: 1px solid var(--color-primary-light);
+  letter-spacing: 0.3px;
+}
+
+.data-table td {
+  padding: 7px 10px;
+  border: 1px solid var(--color-border-subtle);
+  vertical-align: top;
+}
+
+.data-table tr:nth-child(even) td {
+  background-color: var(--color-bg-light);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 7.5pt;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  border-radius: var(--radius-sm);
+  text-transform: uppercase;
+}
+
+.badge-pk {
+  background-color: #1e3a8a;
+  color: #ffffff;
+}
+
+.badge-fk {
+  background-color: #854d0e;
+  color: #ffffff;
+}
+
+.badge-uq {
+  background-color: #065f46;
+  color: #ffffff;
+}
+
+.badge-role {
+  background-color: #4338ca;
+  color: #ffffff;
+}
+
+.badge-success {
+  background-color: #166534;
+  color: #ffffff;
+}
+
+.badge-muted {
+  background-color: #64748b;
+  color: #ffffff;
+}
+
+.code-box {
+  background-color: #0f172a;
+  color: #f8fafc;
+  font-family: var(--font-mono);
+  font-size: 8pt;
+  line-height: 1.4;
+  padding: 12px;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin: 12px 0;
+  border: 1px solid #334155;
+  white-space: pre;
+}
+
+.diagram-wrapper {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin: 14px 0;
+  text-align: center;
+}
+
+.diagram-caption {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.wireframe-box {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 10px;
+  margin: 12px 0 8px 0;
+  text-align: center;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.wireframe-box svg {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.wireframe-caption {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.screenshot-box {
+  background-color: #ffffff;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 8px;
+  margin: 12px 0 16px 0;
+  text-align: center;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.screenshot-box img {
+  max-width: 100%;
+  max-height: 105mm;
+  width: auto;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+
+.screenshot-caption {
+  font-size: 8.5pt;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-top: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.receipt-card {
+  width: 76mm;
+  background-color: #ffffff;
+  border: 1px dashed #94a3b8;
+  border-radius: var(--radius-sm);
+  padding: 12px;
+  margin: 14px auto;
+  font-family: var(--font-mono);
+  font-size: 8pt;
+  color: #000000;
+  line-height: 1.35;
+}
+
+.receipt-header {
+  text-align: center;
+  border-bottom: 1px dashed #000000;
+  padding-bottom: 8px;
+  margin-bottom: 8px;
+}
+
+.receipt-title {
+  font-size: 11pt;
+  font-weight: bold;
+}
+
+.receipt-divider {
+  border-top: 1px dashed #000000;
+  margin: 6px 0;
+}
+
+.receipt-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 2px 0;
+}
+
+.receipt-total-row {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+  font-size: 9pt;
+  margin: 4px 0;
+}
+
+.receipt-footer {
+  text-align: center;
+  margin-top: 8px;
+  font-size: 7.5pt;
+}
+
+.info-banner {
+  background-color: var(--color-accent-soft);
+  border-left: 4px solid var(--color-accent);
+  padding: 10px 14px;
+  margin: 12px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  font-size: 9.5pt;
+  color: var(--color-primary);
+}
+
+.page-break {
+  page-break-before: always;
+  break-before: page;
+}
+
+.avoid-break {
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 15mm;
+  }
+  body {
+    background-color: #ffffff;
+    font-size: 9pt;
+  }
+  .document-container {
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+  }
+  .section-block {
+    margin-top: 10mm;
+  }
+  .cover-page {
+    min-height: 260mm;
+  }
+  .screenshot-box {
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin: 8px 0 12px 0;
+    padding: 6px;
+  }
+  .screenshot-box img {
+    max-width: 100%;
+    max-height: 95mm;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="document-container">
+
+  <div class="cover-page">
+    <div class="cover-header">
+      <div class="cover-tag">Dokumen Perancangan Teknis &bull; Tahap 1</div>
+      <h1 class="cover-title">RANCANG BANGUN SISTEM POS (POINT OF SALE) KAFEJAWA</h1>
+      <div class="cover-subtitle">Spesifikasi Kebutuhan Sistem, Pemodelan Proses Bisnis, Desain Relasional Database, dan Kamus Data Komprehensif</div>
+    </div>
+
+    <div class="cover-meta-grid">
+      <div class="meta-item">
+        <h4>Mata Pelajaran</h4>
+        <p>Rekayasa Perangkat Lunak (RPL)</p>
+      </div>
+      <div class="meta-item">
+        <h4>Kompetensi Keahlian</h4>
+        <p>Pengembangan Perangkat Lunak & Gim (PPLG)</p>
+      </div>
+      <div class="meta-item">
+        <h4>Institusi / Sekolah</h4>
+        <p>SMK MUHAMMADIYAH 1 BANTUL</p>
+      </div>
+      <div class="meta-item">
+        <h4>Fokus Arsitektur</h4>
+        <p>Laravel 12, MySQL 8.0, Native Zero-CDN</p>
+      </div>
+      <div class="meta-item" style="grid-column: span 2;">
+        <h4>Tim Pengembang (Kelompok POS KafeJawa)</h4>
+        <p>1. Lead System Architect & Backend Engineer<br>
+           2. Database Administrator & Data Modeler<br>
+           3. UI/UX Specialist & Frontend Engineer<br>
+           4. Quality Assurance & Technical Writer</p>
+      </div>
+    </div>
+
+    <div class="cover-footer">
+      <div>Status Dokumen: <strong>FINAL & VALIDATED</strong></div>
+      <div>Dokumentasi Tahap 1: Perencanaan & Desain Database</div>
+      <div>Tahun Ajaran 2025/2026</div>
+    </div>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">1.</span>
+        <span class="section-title">LATAR BELAKANG & ANALISIS KEBUTUHAN</span>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">1.1 Latar Belakang Bisnis KafeJawa</h3>
+    <p>KafeJawa merupakan unit usaha kuliner kopi dan makanan khas Nusantara yang beroperasi secara dinamis dengan volume transaksi harian yang tinggi, khususnya pada periode jam sibuk (peak hours). Saat ini, operasional kasir dan pencatatan transaksi masih menghadapi sejumlah kendala klasik:</p>
+    <ul>
+      <li>Pencatatan nota penjualan rawan terjadi duplikasi nomor, selisih perhitungan kalkulator manual, serta keterlambatan rekonsiliasi kas akhir shift.</li>
+      <li>Pergerakan stok bahan baku dan produk siap saji tidak terpotong secara otomatis secara real-time, berisiko menimbulkan kondisi kehabisan stok saat pesanan telah dibayar oleh pelanggan (overselling).</li>
+      <li>Ketiadaan audit trail yang ketat membuka celah kerugian finansial akibat pembatalan transaksi nota yang tidak terdokumentasi secara terpusat.</li>
+      <li>Pemilik usaha kesulitan menganalisis tren penjualan menu terlaris, jam terpadat, dan margin laba kotor harian karena ketiadaan agregasi data otomatis.</li>
+    </ul>
+
+    <h3 class="subsection-title">1.2 Tujuan Pengembangan Sistem</h3>
+    <p>Pembangunan Sistem POS (Point of Sale) KafeJawa bertujuan untuk menghadirkan platform kasir digital yang modern, deterministik, berkecepatan tinggi, dan aman dengan sasaran:</p>
+    <ol>
+      <li>Mempercepat durasi siklus checkout kasir hingga kurang dari 15 detik per transaksi.</li>
+      <li>Menjamin keandalan data inventori melalui mekanisme pemotongan stok otomatis berbasis relasi transaksi ACID.</li>
+      <li>Mengeliminasi potensi fraud dengan penerapan Role-Based Access Control (RBAC) ketat dan pelacakan identitas kasir pada setiap faktur penjualan.</li>
+      <li>Menyediakan struk belanja profesional berstandar printer termal 58mm/80mm yang memuat rincian belanja dan kode invoice unik.</li>
+    </ol>
+
+    <h3 class="subsection-title">1.3 Analisis Kebutuhan Fungsional (Functional Requirements)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 15%;">Kode FR</th>
+          <th style="width: 25%;">Nama Kebutuhan</th>
+          <th>Deskripsi Spesifikasi Fungsional</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>FR-01</strong></td>
+          <td>Autentikasi & Sesi RBAC</td>
+          <td>Sistem membatasi akses berdasarkan kredensial akun terenkripsi (Bcrypt/Argon2) dengan pemisahan hak akses antara peran Admin dan Kasir.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-02</strong></td>
+          <td>Manajemen Kategori</td>
+          <td>Admin dapat menambah, melihat, memperbarui, dan menghapus (soft-delete) data kategori produk menu kopi dan makanan.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-03</strong></td>
+          <td>Manajemen Produk, Harga & Gambar</td>
+          <td>Admin dapat mengelola master produk, kode unik SKU, harga pokok modal, harga jual, kuantitas stok, status aktif, serta unggah dan pengelolaan file gambar menu untuk katalog visual antarmuka kasir.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-04</strong></td>
+          <td>Operasional Kasir (POS)</td>
+          <td>Kasir dapat mencari menu via SKU/nama, menambah kuantitas pesanan, menghitung subtotal otomatis, dan memvalidasi kecukupan stok secara real-time.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-05</strong></td>
+          <td>Kalkulasi Pembayaran</td>
+          <td>Sistem menghitung total belanja, menerima input nominal bayar, menghitung uang kembalian secara presisi, serta mendukung metode tunai, QRIS, dan transfer.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-06</strong></td>
+          <td>Generasi Invoice & Struk</td>
+          <td>Sistem membuat nomor invoice unik berurutan harian (contoh: <code>INV/20260920/0001</code>) dan mencetak struk format printer termal.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-07</strong></td>
+          <td>Otorisasi Void Transaksi</td>
+          <td>Pembatalan transaksi yang telah selesai hanya dapat dilakukan oleh Admin/Supervisor dengan mencatat alasan pembatalan dan memulihkan kuantitas stok.</td>
+        </tr>
+        <tr>
+          <td><strong>FR-08</strong></td>
+          <td>Pelaporan & Analitik</td>
+          <td>Admin dapat mengakses rekapitulasi penjualan harian, mingguan, bulanan, omzet kotor, laba kotor, serta produk terlaris.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">1.4 Kebutuhan Non-Fungsional (Non-Functional Requirements)</h3>
+    <ul>
+      <li><strong>NFR-01 (Kinerja & Kecepatan):</strong> Waktu respons pemrosesan penyimpanan transaksi kasir harus di bawah 300ms pada beban normal.</li>
+      <li><strong>NFR-02 (Integritas Data Transaksional):</strong> Setiap pencatatan transaksi kasir dan mutasi stok wajib dijalankan dalam satu blok transaksi database ACID (Commit & Rollback) untuk mencegah anomali data parsial.</li>
+      <li><strong>NFR-03 (Keamanan Sistem):</strong> Dilengkapi perlindungan terhadap SQL Injection menggunakan PDO Prepared Statements, perlindungan CSRF Token pada seluruh form mutasi data, serta mitigasi Session Hijacking.</li>
+      <li><strong>NFR-04 (Zero-CDN & Kemandirian Offline):</strong> Seluruh dependensi visual, CSS, dan skrip dijalankan secara native/lokal tanpa bergantung pada CDN publik, memastikan mesin kasir tetap bekerja stabil pada jaringan lokal tertutup (intranet).</li>
+      <li><strong>NFR-05 (Audit Trail & Soft Delete):</strong> Menggunakan kolom <code>deleted_at</code> untuk mencegah penghapusan fisik rekaman transaksi dan produk historis.</li>
+    </ul>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">2.</span>
+        <span class="section-title">SPESIFIKASI TEKNIS SISTEM</span>
+      </div>
+    </div>
+
+    <p>Pengembangan POS KafeJawa menerapkan arsitektur perangkat lunak modern yang mengutamakan kesederhanaan implementasi, kinerja eksekusi tinggi, kemudahan pengujian, dan kepatuhan standar industri RPL:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 25%;">Komponen Arsitektur</th>
+          <th style="width: 30%;">Teknologi Terpilih</th>
+          <th>Rasionalisasi & Keunggulan Rekayasa</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Pola Arsitektur</strong></td>
+          <td>Model-View-Controller (MVC)</td>
+          <td>Memisahkan logika bisnis, struktur representasi data relasional, dan antarmuka pengguna secara tegas untuk mempermudah pemeliharaan jangka panjang.</td>
+        </tr>
+        <tr>
+          <td><strong>Backend Framework</strong></td>
+          <td>Laravel 12 (PHP 8.2+)</td>
+          <td>Framework PHP enterprise modern dengan ekosistem routing berkecepatan tinggi, ORM Eloquent tangguh, query builder aman, serta mekanisme migrasi database terstruktur.</td>
+        </tr>
+        <tr>
+          <td><strong>Database Engine</strong></td>
+          <td>MySQL 8.0+ / MariaDB (InnoDB)</td>
+          <td>Mendukung foreign key constraints bertingkat, penanganan transaksi ACID murni, pengindeksan b-tree presisi, serta pengkodean karakter utf8mb4_unicode_ci.</td>
+        </tr>
+        <tr>
+          <td><strong>Frontend & Layout</strong></td>
+          <td>Blade Engine & Native CSS</td>
+          <td>Master layout terpusat tanpa CDN eksternal. Tampilan responsif dengan estetika sharp-edge (radius sudut 2-3px) yang profesional dan ringkas.</td>
+        </tr>
+        <tr>
+          <td><strong>Protokol Pencetakan</strong></td>
+          <td>Thermal Raw CSS & PDF Export</td>
+          <td>Pengaturan media cetak <code>@media print</code> yang dioptimalkan untuk kertas struk termal 58mm/80mm serta konversi dokumen A4 via engine browser headless.</td>
+        </tr>
+        <tr>
+          <td><strong>Manajemen Dependensi</strong></td>
+          <td>Composer & NPM Lokal</td>
+          <td>Seluruh paket pustaka terisolasi dalam direktori lokal proyek tanpa pemanggilan aset via jaringan publik.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="info-banner">
+      <strong>Catatan Kepatuhan Desain:</strong> Sistem menghindari penggunaan komponen "pill-shape div" yang tidak ergonomis pada workstation kasir. Semua elemen kontrol menggunakan kontur sudut tegas (sharp 2px border radius) dengan kontras warna tinggi untuk mempercepat pengenalan visual kasir.
+    </div>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">3.</span>
+        <span class="section-title">AKTOR & MATRIKS HAK AKSES (RBAC)</span>
+      </div>
+    </div>
+
+    <p>Aksesibilitas sistem dikendalikan melalui dua entitas aktor utama dengan batas wewenang yang tegas:</p>
+    <ul>
+      <li><strong>Aktor Admin (Superuser / Manajer):</strong> Bertanggung jawab atas pengelolaan konfigurasi sistem, pemeliharaan master data (kategori, produk, harga dasar), manajemen akun pengguna, penanganan pembatalan nota (void), dan audit laporan pendapatan komprehensif.</li>
+      <li><strong>Aktor Kasir (Operator POS):</strong> Bertanggung jawab atas interaksi langsung di meja pemesanan, penginputan daftar pesanan pelanggan, validasi ketersediaan stok, kalkulasi uang pembayaran dan kembalian, serta pencetakan struk belanja.</li>
+    </ul>
+
+    <h3 class="subsection-title">3.1 Matriks Hak Akses Peran (Role-Based Access Control)</h3>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 30%;">Modul / Fitur Sistem</th>
+          <th style="width: 15%; text-align: center;">Admin</th>
+          <th style="width: 15%; text-align: center;">Kasir</th>
+          <th>Deskripsi Aturan Akses & Batasan Otorisasi</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Autentikasi (Login / Logout)</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td>Semua aktor wajib menginput kredensial aktif untuk mendapatkan token sesi.</td>
+        </tr>
+        <tr>
+          <td>Dashboard Analitik Eksekutif</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Tidak</span></td>
+          <td>Ringkasan omzet, laba kotor, grafik penjualan hanya dapat dilihat oleh Admin.</td>
+        </tr>
+        <tr>
+          <td>Manajemen Master Kategori</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Tidak</span></td>
+          <td>Kasir hanya dapat membaca kategori produk dalam antarmuka POS kasir.</td>
+        </tr>
+        <tr>
+          <td>Manajemen Master Produk & Stok</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Tidak</span></td>
+          <td>Penambahan menu, pengubahan harga jual, dan stok awal merupakan wewenang mutlak Admin.</td>
+        </tr>
+        <tr>
+          <td>Antarmuka Transaksi Kasir (POS)</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td>Akses penuh pencarian menu, penambahan keranjang belanja, dan eksekusi pembayaran.</td>
+        </tr>
+        <tr>
+          <td>Cetak Struk Belanja Pelanggan</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td>Kasir dapat langsung mencetak struk setelah status transaksi tersimpan sukses.</td>
+        </tr>
+        <tr>
+          <td>Pembatalan Transaksi (Void)</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Tidak</span></td>
+          <td>Mencegah manipulasi kas. Kasir wajib memanggil supervisor/admin untuk void transaksi.</td>
+        </tr>
+        <tr>
+          <td>Laporan Rekapitulasi & Riwayat</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Hanya Sesi</span></td>
+          <td>Kasir hanya dapat melihat ringkasan total penjualan shift miliknya sendiri saat tutup kasir.</td>
+        </tr>
+        <tr>
+          <td>Manajemen Pengguna (User Management)</td>
+          <td style="text-align: center;"><span class="badge badge-success">Ya</span></td>
+          <td style="text-align: center;"><span class="badge badge-muted">Tidak</span></td>
+          <td>Admin mengelola akun kasir baru, reset password, dan status aktif akun pegawai.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">4.</span>
+        <span class="section-title">DIAGRAM USE CASE SISTEM</span>
+      </div>
+    </div>
+
+    <p>Diagram Use Case berikut memodelkan batas sistem (system boundary), entitas aktor eksternal, use case fungsional, serta relasi dependensi <code>&lt;&lt;include&gt;&gt;</code> dan <code>&lt;&lt;extend&gt;&gt;</code> secara terstruktur:</p>
+
+    <div class="diagram-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" width="100%" height="520" style="background:#ffffff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <rect x="180" y="20" width="540" height="580" rx="3" fill="#ffffff" stroke="#64748b" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <rect x="180" y="20" width="540" height="34" rx="3" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+        <text x="450" y="42" text-anchor="middle" font-size="12" font-weight="700" fill="#0f172a" letter-spacing="1">SYSTEM BOUNDARY: POS KAFEJAWA</text>
+
+        <g transform="translate(60, 180)">
+          <circle cx="25" cy="20" r="14" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="34" x2="25" y2="70" stroke="#0f172a" stroke-width="2"/>
+          <line x1="2" y1="46" x2="48" y2="46" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="70" x2="5" y2="105" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="70" x2="45" y2="105" stroke="#0f172a" stroke-width="2"/>
+          <rect x="-15" y="115" width="80" height="24" rx="2" fill="#0f172a"/>
+          <text x="25" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Admin</text>
+          <text x="25" y="152" text-anchor="middle" font-size="9" fill="#475569">Supervisor / Owner</text>
+        </g>
+
+        <g transform="translate(800, 180)">
+          <circle cx="25" cy="20" r="14" fill="#f8fafc" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="34" x2="25" y2="70" stroke="#0f172a" stroke-width="2"/>
+          <line x1="2" y1="46" x2="48" y2="46" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="70" x2="5" y2="105" stroke="#0f172a" stroke-width="2"/>
+          <line x1="25" y1="70" x2="45" y2="105" stroke="#0f172a" stroke-width="2"/>
+          <rect x="-15" y="115" width="80" height="24" rx="2" fill="#0f172a"/>
+          <text x="25" y="131" text-anchor="middle" font-size="11" font-weight="700" fill="#ffffff">Kasir</text>
+          <text x="25" y="152" text-anchor="middle" font-size="9" fill="#475569">Front Office POS</text>
+        </g>
+
+        <g id="usecases">
+          <g transform="translate(300, 80)">
+            <ellipse cx="0" cy="0" rx="90" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Login &amp; Autentikasi</text>
+          </g>
+
+          <g transform="translate(300, 145)">
+            <ellipse cx="0" cy="0" rx="95" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Kelola Master Kategori</text>
+          </g>
+
+          <g transform="translate(300, 210)">
+            <ellipse cx="0" cy="0" rx="95" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Kelola Produk &amp; Stok</text>
+          </g>
+
+          <g transform="translate(300, 275)">
+            <ellipse cx="0" cy="0" rx="95" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Kelola Akun Pengguna</text>
+          </g>
+
+          <g transform="translate(300, 340)">
+            <ellipse cx="0" cy="0" rx="95" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Laporan &amp; Analisis Penjualan</text>
+          </g>
+
+          <g transform="translate(590, 120)">
+            <ellipse cx="0" cy="0" rx="95" ry="24" fill="#f8fafc" stroke="#1d4ed8" stroke-width="2"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="700" fill="#1d4ed8">Transaksi Kasir (Checkout)</text>
+          </g>
+
+          <g transform="translate(590, 225)">
+            <ellipse cx="0" cy="0" rx="90" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Hitung Bayar &amp; Kembalian</text>
+          </g>
+
+          <g transform="translate(590, 320)">
+            <ellipse cx="0" cy="0" rx="85" ry="22" fill="#f8fafc" stroke="#1e293b" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="600" fill="#0f172a">Cetak Struk Belanja</text>
+          </g>
+
+          <g transform="translate(480, 480)">
+            <ellipse cx="0" cy="0" rx="95" ry="22" fill="#fef2f2" stroke="#b91c1c" stroke-width="1.5"/>
+            <text x="0" y="4" text-anchor="middle" font-size="10.5" font-weight="700" fill="#b91c1c">Pembatalan Transaksi (Void)</text>
+          </g>
+        </g>
+
+        <g id="lines" stroke="#475569" stroke-width="1.2">
+          <line x1="85" y1="230" x2="210" y2="85"/>
+          <line x1="85" y1="235" x2="205" y2="145"/>
+          <line x1="85" y1="240" x2="205" y2="210"/>
+          <line x1="85" y1="245" x2="205" y2="275"/>
+          <line x1="85" y1="250" x2="205" y2="340"/>
+          <line x1="85" y1="260" x2="385" y2="480"/>
+
+          <line x1="825" y1="230" x2="390" y2="85"/>
+          <line x1="825" y1="235" x2="685" y2="120"/>
+          <line x1="825" y1="250" x2="675" y2="320"/>
+        </g>
+
+        <g id="dependencies" stroke="#1d4ed8" stroke-width="1.5" stroke-dasharray="4,3">
+          <line x1="590" y1="144" x2="590" y2="203"/>
+          <polygon points="587,196 590,203 593,196" fill="#1d4ed8"/>
+          <rect x="555" y="165" width="70" height="16" rx="2" fill="#eff6ff" stroke="#bfdbfe"/>
+          <text x="590" y="177" text-anchor="middle" font-size="8" font-weight="700" fill="#1d4ed8">&lt;&lt;include&gt;&gt;</text>
+
+          <path d="M 640 142 Q 700 230 635 305" fill="none"/>
+          <polygon points="633,298 635,305 640,299" fill="#1d4ed8"/>
+          <rect x="660" y="215" width="70" height="16" rx="2" fill="#eff6ff" stroke="#bfdbfe"/>
+          <text x="695" y="227" text-anchor="middle" font-size="8" font-weight="700" fill="#1d4ed8">&lt;&lt;include&gt;&gt;</text>
+
+          <path d="M 520 460 Q 490 280 540 144" fill="none" stroke="#b91c1c"/>
+          <polygon points="536,151 540,144 543,152" fill="#b91c1c"/>
+          <rect x="475" y="295" width="66" height="16" rx="2" fill="#fef2f2" stroke="#fecaca"/>
+          <text x="508" y="307" text-anchor="middle" font-size="8" font-weight="700" fill="#b91c1c">&lt;&lt;extend&gt;&gt;</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Gambar 4.1: Diagram Use Case Lengkap Sistem POS KafeJawa</div>
+    </div>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">5.</span>
+        <span class="section-title">DIAGRAM ENTITY-RELATIONSHIP (ERD)</span>
+      </div>
+    </div>
+
+    <p>Desain basis data POS KafeJawa menerapkan normalisasi tingkat ketiga (3NF) yang terdiri dari 5 entitas relasional terpadu. Hubungan antar tabel dirancang tanpa perpotongan jalur (zero-crossing orthogonal layout) untuk menjamin integritas referensial dan performa kueri optimal:</p>
+
+    <div class="diagram-wrapper">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 670" width="100%" height="560" style="background:#ffffff; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#334155" />
+          </marker>
+        </defs>
+
+        <g transform="translate(40, 40)">
+          <rect x="0" y="0" width="250" height="170" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="0" y="0" width="250" height="30" rx="3" fill="#0f172a"/>
+          <text x="125" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" letter-spacing="0.5">categories</text>
+          <g font-size="9" transform="translate(10, 48)">
+            <rect x="0" y="-10" width="22" height="14" rx="2" fill="#1e3a8a"/>
+            <text x="11" y="0" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">PK</text>
+            <text x="30" y="1" font-weight="600" fill="#0f172a">id</text>
+            <text x="140" y="1" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <rect x="0" y="14" width="22" height="14" rx="2" fill="#065f46"/>
+            <text x="11" y="24" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">UQ</text>
+            <text x="30" y="25" font-weight="600" fill="#0f172a">name</text>
+            <text x="140" y="25" fill="#64748b">VARCHAR(100)</text>
+
+            <text x="30" y="49" fill="#0f172a">created_at</text>
+            <text x="140" y="49" fill="#64748b">TIMESTAMP</text>
+
+            <text x="30" y="73" fill="#0f172a">updated_at</text>
+            <text x="140" y="73" fill="#64748b">TIMESTAMP</text>
+
+            <text x="30" y="97" fill="#0f172a">deleted_at</text>
+            <text x="140" y="97" fill="#94a3b8">TIMESTAMP (NULL)</text>
+          </g>
+        </g>
+
+        <g transform="translate(670, 40)">
+          <rect x="0" y="0" width="250" height="195" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="0" y="0" width="250" height="30" rx="3" fill="#0f172a"/>
+          <text x="125" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" letter-spacing="0.5">users</text>
+          <g font-size="9" transform="translate(10, 48)">
+            <rect x="0" y="-10" width="22" height="14" rx="2" fill="#1e3a8a"/>
+            <text x="11" y="0" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">PK</text>
+            <text x="30" y="1" font-weight="600" fill="#0f172a">id</text>
+            <text x="140" y="1" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <text x="30" y="25" font-weight="600" fill="#0f172a">name</text>
+            <text x="140" y="25" fill="#64748b">VARCHAR(100)</text>
+
+            <rect x="0" y="38" width="22" height="14" rx="2" fill="#065f46"/>
+            <text x="11" y="48" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">UQ</text>
+            <text x="30" y="49" font-weight="600" fill="#0f172a">username</text>
+            <text x="140" y="49" fill="#64748b">VARCHAR(50)</text>
+
+            <text x="30" y="73" fill="#0f172a">password</text>
+            <text x="140" y="73" fill="#64748b">VARCHAR(255)</text>
+
+            <text x="30" y="97" font-weight="600" fill="#0f172a">role</text>
+            <text x="140" y="97" fill="#64748b">ENUM(admin,kasir)</text>
+
+            <text x="30" y="121" fill="#0f172a">created_at</text>
+            <text x="140" y="121" fill="#64748b">TIMESTAMP</text>
+
+            <text x="30" y="145" fill="#0f172a">deleted_at</text>
+            <text x="140" y="145" fill="#94a3b8">TIMESTAMP (NULL)</text>
+          </g>
+        </g>
+
+        <g transform="translate(40, 310)">
+          <rect x="0" y="0" width="250" height="320" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="0" y="0" width="250" height="30" rx="3" fill="#0f172a"/>
+          <text x="125" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" letter-spacing="0.5">products</text>
+          <g font-size="9" transform="translate(10, 48)">
+            <rect x="0" y="-10" width="22" height="14" rx="2" fill="#1e3a8a"/>
+            <text x="11" y="0" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">PK</text>
+            <text x="30" y="1" font-weight="600" fill="#0f172a">id</text>
+            <text x="140" y="1" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <rect x="0" y="14" width="22" height="14" rx="2" fill="#854d0e"/>
+            <text x="11" y="24" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">FK</text>
+            <text x="30" y="25" font-weight="600" fill="#0f172a">category_id</text>
+            <text x="140" y="25" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <text x="30" y="49" font-weight="600" fill="#0f172a">name</text>
+            <text x="140" y="49" fill="#64748b">VARCHAR(150)</text>
+
+            <rect x="0" y="62" width="22" height="14" rx="2" fill="#065f46"/>
+            <text x="11" y="72" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">UQ</text>
+            <text x="30" y="73" font-weight="600" fill="#0f172a">sku</text>
+            <text x="140" y="73" fill="#64748b">VARCHAR(50)</text>
+
+            <text x="30" y="97" font-weight="600" fill="#0f172a">price</text>
+            <text x="140" y="97" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="121" fill="#0f172a">cost_price</text>
+            <text x="140" y="121" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="145" font-weight="600" fill="#0f172a">stock</text>
+            <text x="140" y="145" fill="#64748b">INT</text>
+
+            <text x="30" y="169" fill="#0f172a">is_active</text>
+            <text x="140" y="169" fill="#64748b">BOOLEAN</text>
+
+            <text x="30" y="193" fill="#0f172a">image</text>
+            <text x="140" y="193" fill="#64748b">VARCHAR(255)</text>
+
+            <text x="30" y="217" fill="#0f172a">created_at</text>
+            <text x="140" y="217" fill="#64748b">TIMESTAMP</text>
+
+            <text x="30" y="241" fill="#0f172a">deleted_at</text>
+            <text x="140" y="241" fill="#94a3b8">TIMESTAMP (NULL)</text>
+          </g>
+        </g>
+
+        <g transform="translate(355, 330)">
+          <rect x="0" y="0" width="250" height="240" rx="3" fill="#ffffff" stroke="#1d4ed8" stroke-width="2"/>
+          <rect x="0" y="0" width="250" height="30" rx="3" fill="#1d4ed8"/>
+          <text x="125" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" letter-spacing="0.5">transaction_details</text>
+          <g font-size="9" transform="translate(10, 48)">
+            <rect x="0" y="-10" width="22" height="14" rx="2" fill="#1e3a8a"/>
+            <text x="11" y="0" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">PK</text>
+            <text x="30" y="1" font-weight="600" fill="#0f172a">id</text>
+            <text x="140" y="1" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <rect x="0" y="14" width="22" height="14" rx="2" fill="#854d0e"/>
+            <text x="11" y="24" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">FK</text>
+            <text x="30" y="25" font-weight="600" fill="#0f172a">transaction_id</text>
+            <text x="140" y="25" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <rect x="0" y="38" width="22" height="14" rx="2" fill="#854d0e"/>
+            <text x="11" y="48" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">FK</text>
+            <text x="30" y="49" font-weight="600" fill="#0f172a">product_id</text>
+            <text x="140" y="49" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <text x="30" y="73" font-weight="600" fill="#0f172a">quantity</text>
+            <text x="140" y="73" fill="#64748b">INT</text>
+
+            <text x="30" y="97" fill="#0f172a">unit_price</text>
+            <text x="140" y="97" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="121" font-weight="600" fill="#0f172a">subtotal</text>
+            <text x="140" y="121" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="145" fill="#0f172a">created_at</text>
+            <text x="140" y="145" fill="#64748b">TIMESTAMP</text>
+          </g>
+        </g>
+
+        <g transform="translate(670, 300)">
+          <rect x="0" y="0" width="250" height="315" rx="3" fill="#ffffff" stroke="#0f172a" stroke-width="1.5"/>
+          <rect x="0" y="0" width="250" height="30" rx="3" fill="#0f172a"/>
+          <text x="125" y="20" text-anchor="middle" font-size="11.5" font-weight="700" fill="#ffffff" letter-spacing="0.5">transactions</text>
+          <g font-size="9" transform="translate(10, 48)">
+            <rect x="0" y="-10" width="22" height="14" rx="2" fill="#1e3a8a"/>
+            <text x="11" y="0" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">PK</text>
+            <text x="30" y="1" font-weight="600" fill="#0f172a">id</text>
+            <text x="140" y="1" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <rect x="0" y="14" width="22" height="14" rx="2" fill="#065f46"/>
+            <text x="11" y="24" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">UQ</text>
+            <text x="30" y="25" font-weight="600" fill="#0f172a">invoice_number</text>
+            <text x="140" y="25" fill="#64748b">VARCHAR(50)</text>
+
+            <rect x="0" y="38" width="22" height="14" rx="2" fill="#854d0e"/>
+            <text x="11" y="48" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#ffffff">FK</text>
+            <text x="30" y="49" font-weight="600" fill="#0f172a">user_id</text>
+            <text x="140" y="49" fill="#64748b">BIGINT UNSIGNED</text>
+
+            <text x="30" y="73" font-weight="600" fill="#0f172a">total_amount</text>
+            <text x="140" y="73" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="97" fill="#0f172a">pay_amount</text>
+            <text x="140" y="97" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="121" fill="#0f172a">change_amount</text>
+            <text x="140" y="121" fill="#64748b">DECIMAL(12,2)</text>
+
+            <text x="30" y="145" fill="#0f172a">payment_method</text>
+            <text x="140" y="145" fill="#64748b">ENUM</text>
+
+            <text x="30" y="169" font-weight="600" fill="#0f172a">status</text>
+            <text x="140" y="169" fill="#64748b">ENUM</text>
+
+            <text x="30" y="193" fill="#0f172a">created_at</text>
+            <text x="140" y="193" fill="#64748b">TIMESTAMP</text>
+
+            <text x="30" y="217" fill="#0f172a">deleted_at</text>
+            <text x="140" y="217" fill="#94a3b8">TIMESTAMP (NULL)</text>
+          </g>
+        </g>
+
+        <g id="relations" stroke="#334155" stroke-width="1.8">
+          <line x1="165" y1="210" x2="165" y2="310"/>
+          <circle cx="165" cy="220" r="3" fill="#334155"/>
+          <line x1="155" y1="225" x2="175" y2="225"/>
+          <line x1="155" y1="298" x2="165" y2="308"/>
+          <line x1="175" y1="298" x2="165" y2="308"/>
+          <line x1="165" y1="296" x2="165" y2="308"/>
+          <rect x="110" y="248" width="110" height="18" rx="2" fill="#ffffff" stroke="#cbd5e1"/>
+          <text x="165" y="260" text-anchor="middle" font-size="8" font-weight="bold" fill="#0f172a">1 : N (kategori)</text>
+
+          <line x1="795" y1="235" x2="795" y2="300"/>
+          <circle cx="795" cy="245" r="3" fill="#334155"/>
+          <line x1="785" y1="250" x2="805" y2="250"/>
+          <line x1="785" y1="288" x2="795" y2="298"/>
+          <line x1="805" y1="288" x2="795" y2="298"/>
+          <line x1="795" y1="286" x2="795" y2="298"/>
+          <rect x="740" y="258" width="110" height="18" rx="2" fill="#ffffff" stroke="#cbd5e1"/>
+          <text x="795" y="270" text-anchor="middle" font-size="8" font-weight="bold" fill="#0f172a">1 : N (kasir)</text>
+
+          <line x1="290" y1="430" x2="355" y2="430"/>
+          <circle cx="300" cy="430" r="3" fill="#334155"/>
+          <line x1="305" y1="422" x2="305" y2="438"/>
+          <line x1="345" y1="422" x2="355" y2="430"/>
+          <line x1="345" y1="438" x2="355" y2="430"/>
+          <rect x="295" y="442" width="60" height="16" rx="2" fill="#ffffff" stroke="#cbd5e1"/>
+          <text x="325" y="453" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#0f172a">1 : N</text>
+
+          <line x1="670" y1="430" x2="605" y2="430"/>
+          <circle cx="660" cy="430" r="3" fill="#334155"/>
+          <line x1="655" y1="422" x2="655" y2="438"/>
+          <line x1="615" y1="422" x2="605" y2="430"/>
+          <line x1="615" y1="438" x2="605" y2="430"/>
+          <rect x="610" y="442" width="60" height="16" rx="2" fill="#ffffff" stroke="#cbd5e1"/>
+          <text x="640" y="453" text-anchor="middle" font-size="7.5" font-weight="bold" fill="#0f172a">1 : N</text>
+        </g>
+      </svg>
+      <div class="diagram-caption">Gambar 5.1: Diagram Relasi Entitas (ERD) Basis Data POS KafeJawa</div>
+    </div>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">6.</span>
+        <span class="section-title">KAMUS DATA RINCI (DATA DICTIONARY)</span>
+      </div>
+    </div>
+
+    <p>Kamus data berikut menjabarkan spesifikasi struktural, tipe data fisik, kekangan integritas (constraints), serta aturan bisnis untuk seluruh tabel pada basis data <code>kafejawa</code>:</p>
+
+    <h3 class="subsection-title">6.1 Tabel: <code>users</code></h3>
+    <p>Menyimpan data identitas pegawai kasir dan administrator sistem yang memiliki hak otorisasi login.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 20%;">Nama Kolom</th>
+          <th style="width: 22%;">Tipe Data &amp; Panjang</th>
+          <th style="width: 12%;">Null?</th>
+          <th style="width: 15%;">Default</th>
+          <th>Keterangan &amp; Aturan Bisnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>AUTO_INCREMENT</td>
+          <td><span class="badge badge-pk">PK</span> Primary key unik pengguna sistem.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>name</code></td>
+          <td>VARCHAR(100)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Nama lengkap pegawai / kasir yang bertugas.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>username</code></td>
+          <td>VARCHAR(50)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-uq">UQ</span> Nama akun unik untuk proses otentikasi login.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>password</code></td>
+          <td>VARCHAR(255)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Hash kata sandi menggunakan algoritma Bcrypt/Argon2.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>role</code></td>
+          <td>ENUM('admin', 'kasir')</td>
+          <td>NO</td>
+          <td>'kasir'</td>
+          <td><span class="badge badge-role">Role</span> Pembatas hak akses pengguna dalam aplikasi.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><code>created_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu perekaman entri akun pengguna ke database.</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><code>updated_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pembaruan data pengguna terakhir.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><code>deleted_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Audit trail soft-delete; NULL menandakan akun aktif.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">6.2 Tabel: <code>categories</code></h3>
+    <p>Menyimpan klasifikasi pengelompokan menu kafe (misal: Espresso Based, Manual Brew, Non-Coffee, Makanan Berat, Snack).</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 20%;">Nama Kolom</th>
+          <th style="width: 22%;">Tipe Data &amp; Panjang</th>
+          <th style="width: 12%;">Null?</th>
+          <th style="width: 15%;">Default</th>
+          <th>Keterangan &amp; Aturan Bisnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>AUTO_INCREMENT</td>
+          <td><span class="badge badge-pk">PK</span> Primary key unik kategori.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>name</code></td>
+          <td>VARCHAR(100)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-uq">UQ</span> Nama kategori unik yang tampil pada tab POS kasir.</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>created_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pencatatan kategori baru.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>updated_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pembaruan data kategori.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>deleted_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Audit trail soft-delete kategori.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title page-break">6.3 Tabel: <code>products</code></h3>
+    <p>Menyimpan katalog item produk makanan/minuman yang siap ditransaksikan di meja kasir.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 20%;">Nama Kolom</th>
+          <th style="width: 22%;">Tipe Data &amp; Panjang</th>
+          <th style="width: 12%;">Null?</th>
+          <th style="width: 15%;">Default</th>
+          <th>Keterangan &amp; Aturan Bisnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>AUTO_INCREMENT</td>
+          <td><span class="badge badge-pk">PK</span> Primary key unik item produk.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>category_id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-fk">FK</span> Terhubung ke <code>categories.id</code> (RESTRICT/CASCADE).</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>name</code></td>
+          <td>VARCHAR(150)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Nama lengkap menu/produk (contoh: Kopi Susu Gula Aren).</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>sku</code></td>
+          <td>VARCHAR(50)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-uq">UQ</span> Stock Keeping Unit unik untuk barcode scanning/pencarian cepat.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>price</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Harga jual resmi ke konsumen per porsi/satuan.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><code>cost_price</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>0.00</td>
+          <td>Harga Pokok Penjualan (HPP) untuk kalkulasi laba kotor.</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><code>stock</code></td>
+          <td>INT</td>
+          <td>NO</td>
+          <td>0</td>
+          <td>Kuantitas fisik produk siap saji yang tersedia saat ini.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><code>is_active</code></td>
+          <td>BOOLEAN</td>
+          <td>NO</td>
+          <td>TRUE</td>
+          <td>Flag status: TRUE = tampil di kasir, FALSE = dinonaktifkan.</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><code>image</code></td>
+          <td>VARCHAR(255)</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Path file/URL gambar menu untuk visual grid POS kasir.</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><code>created_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu penambahan produk ke database.</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><code>updated_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pembaruan harga atau kuantitas stok produk.</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><code>deleted_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Audit trail soft-delete produk.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">6.4 Tabel: <code>transactions</code></h3>
+    <p>Menyimpan data ringkasan transaksi penjualan (header faktur) yang dieksekusi oleh kasir.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 20%;">Nama Kolom</th>
+          <th style="width: 22%;">Tipe Data &amp; Panjang</th>
+          <th style="width: 12%;">Null?</th>
+          <th style="width: 15%;">Default</th>
+          <th>Keterangan &amp; Aturan Bisnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>AUTO_INCREMENT</td>
+          <td><span class="badge badge-pk">PK</span> Primary key unik transaksi penjualan.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>invoice_number</code></td>
+          <td>VARCHAR(50)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-uq">UQ</span> Nomor struk unik (format: INV/YYYYMMDD/XXXXX).</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>user_id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-fk">FK</span> Terhubung ke <code>users.id</code> identitas kasir bertugas.</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>total_amount</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Akumulasi subtotal dari seluruh item pesanan belanja.</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>pay_amount</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Jumlah uang tunai / digital yang diserahkan pelanggan.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><code>change_amount</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Nominal uang kembalian (<code>pay_amount - total_amount</code>).</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><code>payment_method</code></td>
+          <td>ENUM('cash','qris','transfer')</td>
+          <td>NO</td>
+          <td>'cash'</td>
+          <td>Metode pembayaran yang dipilih pembeli saat checkout.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><code>status</code></td>
+          <td>ENUM('completed','canceled')</td>
+          <td>NO</td>
+          <td>'completed'</td>
+          <td>Status transaksi (completed = valid, canceled = di-void).</td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td><code>notes</code></td>
+          <td>TEXT</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Catatan khusus pesanan atau alasan pembatalan (void).</td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td><code>created_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu eksekusi checkout transaksi (terindeks untuk rekap).</td>
+        </tr>
+        <tr>
+          <td>11</td>
+          <td><code>updated_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pembaruan status transaksi terakhir.</td>
+        </tr>
+        <tr>
+          <td>12</td>
+          <td><code>deleted_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>YES</td>
+          <td>NULL</td>
+          <td>Soft delete untuk mempertahankan arsip finansial audit.</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 class="subsection-title">6.5 Tabel: <code>transaction_details</code></h3>
+    <p>Menyimpan rincian item produk yang dibeli pada setiap nomor transaksi penjualan.</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 20%;">Nama Kolom</th>
+          <th style="width: 22%;">Tipe Data &amp; Panjang</th>
+          <th style="width: 12%;">Null?</th>
+          <th style="width: 15%;">Default</th>
+          <th>Keterangan &amp; Aturan Bisnis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><code>id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>AUTO_INCREMENT</td>
+          <td><span class="badge badge-pk">PK</span> Primary key unik baris rincian pesanan.</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><code>transaction_id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-fk">FK</span> Terhubung ke <code>transactions.id</code> (CASCADE).</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><code>product_id</code></td>
+          <td>BIGINT UNSIGNED</td>
+          <td>NO</td>
+          <td>None</td>
+          <td><span class="badge badge-fk">FK</span> Terhubung ke <code>products.id</code> (RESTRICT).</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><code>quantity</code></td>
+          <td>INT</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Jumlah kuantitas item produk yang dipesan (harus &gt; 0).</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><code>unit_price</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Snapshot harga jual per unit saat transaksi berlangsung.</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><code>subtotal</code></td>
+          <td>DECIMAL(12,2)</td>
+          <td>NO</td>
+          <td>None</td>
+          <td>Hasil kali harga per unit dengan kuantitas (<code>unit_price * quantity</code>).</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><code>created_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pencatatan baris rincian belanja.</td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td><code>updated_at</code></td>
+          <td>TIMESTAMP</td>
+          <td>NO</td>
+          <td>CURRENT_TIMESTAMP</td>
+          <td>Waktu pembaruan baris rincian belanja.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">7.</span>
+        <span class="section-title">ALUR TRANSAKSI KASIR &amp; FORMAT CETAK STRUK</span>
+      </div>
+    </div>
+
+    <h3 class="subsection-title">7.1 Alur Transaksi Kasir (Step-by-Step POS Workflow)</h3>
+    <p>Prosedur operasi standar (SOP) pelaksanaan transaksi di meja kasir KafeJawa dirancang dengan kontrol validasi ketat:</p>
+    <ol>
+      <li><strong>Otentikasi &amp; Inisiasi Kasir:</strong> Kasir melakukan login menggunakan username dan password. Sistem merekam <code>user_id</code> sesi aktif.</li>
+      <li><strong>Pemilihan Produk &amp; Validasi Stok:</strong> Kasir memindai barcode / mengklik item pada antarmuka POS. Sistem memvalidasi apakah kuantitas permintaan <code>&le; stock</code> produk. Jika stok tidak mencukupi, sistem menampilkan peringatan penolakan seketika.</li>
+      <li><strong>Akumulasi Keranjang Belanja:</strong> Sistem menghitung subtotal tiap baris pesanan dan mengagregasi <code>total_amount</code> secara deterministik.</li>
+      <li><strong>Pemilihan Metode Pembayaran:</strong> Pelanggan memilih metode: Tunai (Cash), QRIS Statis/Dinamis, atau Transfer Bank.</li>
+      <li><strong>Validasi Pembayaran:</strong>
+        <ul>
+          <li>Untuk Tunai: Kasir menginput <code>pay_amount</code>. Sistem memeriksa <code>pay_amount &ge; total_amount</code> dan menghitung <code>change_amount = pay_amount - total_amount</code>.</li>
+          <li>Untuk QRIS/Transfer: Sistem menetapkan <code>pay_amount = total_amount</code> dan <code>change_amount = 0.00</code> setelah konfirmasi berhasil diterima.</li>
+        </ul>
+      </li>
+      <li><strong>Eksekusi Database Transaksional (ACID):</strong>
+        <div class="info-banner" style="margin: 6px 0;">
+          Sistem menjalankan blok <code>DB::transaction()</code>:
+          <br>a. Generate <code>invoice_number</code> unik baru.
+          <br>b. Simpan header ke tabel <code>transactions</code>.
+          <br>c. Simpan seluruh baris pesanan ke tabel <code>transaction_details</code>.
+          <br>d. Kurangi stok fisik pada tabel <code>products</code>: <code>stock = stock - quantity</code>.
+          <br>e. Commit transaksi basis data. Jika ada galat, seluruh aksi di-rollback.
+        </div>
+      </li>
+      <li><strong>Pencetakan Struk Otomatis:</strong> Antarmuka kasir secara otomatis memicu dialog cetak termal format 58mm atau 80mm tanpa memuat ulang (reload) halaman kasir.</li>
+    </ol>
+
+    <h3 class="subsection-title">7.2 Format Desain Struk Kasir Termal (58mm / 80mm)</h3>
+    <p>Berikut adalah representasi visual tata letak struk kasir resmi yang dicetak oleh printer termal POS KafeJawa:</p>
+
+    <div class="receipt-card">
+      <div class="receipt-header">
+        <div class="receipt-title">KAFEJAWA COFFEE &amp; EATERY</div>
+        <div>Jl. Malioboro No. 45, Yogyakarta</div>
+        <div>Telp: (0274) 554321 / 0812-3456-7890</div>
+      </div>
+
+      <div class="receipt-row">
+        <span>No. Faktur:</span>
+        <strong>INV/20260920/0042</strong>
+      </div>
+      <div class="receipt-row">
+        <span>Tanggal:</span>
+        <span>20/09/2026 19:45 WIB</span>
+      </div>
+      <div class="receipt-row">
+        <span>Kasir:</span>
+        <span>Budi Santoso (KAS-01)</span>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-row" style="font-weight: bold; margin-bottom: 4px;">
+        <span>ITEM PESANAN</span>
+        <span>SUBTOTAL</span>
+      </div>
+
+      <div style="margin-bottom: 4px;">
+        <div style="font-weight: 600;">Kopi Susu Gula Aren</div>
+        <div class="receipt-row" style="color: #334155;">
+          <span>&nbsp;&nbsp;2 x Rp 18.000</span>
+          <span>Rp 36.000</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 4px;">
+        <div style="font-weight: 600;">Manual Brew V60 Gayo</div>
+        <div class="receipt-row" style="color: #334155;">
+          <span>&nbsp;&nbsp;1 x Rp 22.000</span>
+          <span>Rp 22.000</span>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 4px;">
+        <div style="font-weight: 600;">Pisang Goreng Keju Aren</div>
+        <div class="receipt-row" style="color: #334155;">
+          <span>&nbsp;&nbsp;1 x Rp 15.000</span>
+          <span>Rp 15.000</span>
+        </div>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-row">
+        <span>Total Qty:</span>
+        <span>4 Item</span>
+      </div>
+      <div class="receipt-total-row">
+        <span>TOTAL BELANJA:</span>
+        <span>Rp 73.000</span>
+      </div>
+      <div class="receipt-row">
+        <span>Metode Pembayaran:</span>
+        <span>TUNAI (CASH)</span>
+      </div>
+      <div class="receipt-row">
+        <span>Jumlah Bayar:</span>
+        <span>Rp 100.000</span>
+      </div>
+      <div class="receipt-total-row">
+        <span>KEMBALIAN:</span>
+        <span>Rp 27.000</span>
+      </div>
+
+      <div class="receipt-divider"></div>
+
+      <div class="receipt-footer">
+        <div>Harga sudah termasuk pajak restoran.</div>
+        <div>Terima kasih atas kunjungan Anda di KafeJawa!</div>
+        <div style="margin-top: 4px; font-weight: bold;">Simpan struk ini sebagai bukti pembayaran sah.</div>
+        <div style="margin-top: 6px; letter-spacing: 2px;">*** LAYANAN KONSUMEN ***</div>
+        <div>IG: @kafejawa.official &bull; WiFi: kafejawa-guest</div>
+      </div>
+    </div>
+  </div>
+
+      <div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">8.</span>
+        <span class="section-title">DOKUMENTASI WIREFRAME &amp; TANGKAPAN LAYAR ASLI ANTARMUKA (UI/UX)</span>
+      </div>
+    </div>
+
+    <p>Bab ini menyajikan komparasi komprehensif antara <strong>Wireframe Perancangan (Blueprint Konseptual)</strong> dengan <strong>Tangkapan Layar Asli (Real Implementation Screenshot)</strong> sistem POS KafeJawa, dilengkapi dengan tabel spesifikasi komponen teknis. Pendekatan ini membuktikan kesesuaian antara rencana arsitektur antarmuka dengan produk perangkat lunak nyata yang telah berfungsi penuh di lingkungan lokal MySQL &amp; Laravel 12.</p>
+
+    <!-- 8.1 LOGIN -->
+    <h3 class="subsection-title">8.1 Halaman Autentikasi Pengguna (Login)</h3>
+    <p>Halaman autentikasi menyajikan kartu modal terpusat (centered login modal) dengan perlindungan sesi dan token CSRF.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0;" class="avoid-break">
+      <div class="wireframe-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: var(--color-primary); margin-bottom: 4px; text-transform: uppercase;">A. Wireframe Blueprint</div>
+        <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+          <rect x="0" y="0" width="760" height="420" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="3"/>
+          <rect x="0" y="0" width="760" height="32" fill="#0f172a" rx="3"/>
+          <circle cx="18" cy="16" r="5" fill="#ef4444"/><circle cx="34" cy="16" r="5" fill="#f59e0b"/><circle cx="50" cy="16" r="5" fill="#10b981"/>
+          <text x="70" y="20" fill="#94a3b8" font-size="11" font-family="monospace">wireframe://kafejawa/login</text>
+          <rect x="200" y="52" width="360" height="342" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" rx="2"/>
+          <rect x="350" y="68" width="60" height="38" fill="#f1f5f9" stroke="#64748b" stroke-width="1"/>
+          <line x1="350" y1="68" x2="410" y2="106" stroke="#cbd5e1" stroke-width="1"/><line x1="350" y1="106" x2="410" y2="68" stroke="#cbd5e1" stroke-width="1"/>
+          <text x="380" y="91" fill="#475569" font-size="9" font-weight="bold" text-anchor="middle">LOGO</text>
+          <text x="380" y="122" fill="#0f172a" font-size="13" font-weight="bold" text-anchor="middle">KAFEJAWA POS</text>
+          <text x="380" y="136" fill="#64748b" font-size="9.5" text-anchor="middle">Masuk Akun Kasir / Administrator</text>
+          <text x="230" y="160" fill="#334155" font-size="9.5" font-weight="600">Alamat Email :</text>
+          <rect x="230" y="167" width="300" height="28" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" rx="2"/>
+          <text x="240" y="185" fill="#94a3b8" font-size="9.5">[ placeholder: user@kafejawa.local ]</text>
+          <text x="230" y="213" fill="#334155" font-size="9.5" font-weight="600">Kata Sandi :</text>
+          <rect x="230" y="220" width="300" height="28" fill="#f8fafc" stroke="#94a3b8" stroke-width="1" rx="2"/>
+          <text x="240" y="238" fill="#94a3b8" font-size="9.5">[ •••••••••••• ]</text>
+          <rect x="230" y="260" width="145" height="26" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" rx="2"/>
+          <text x="302" y="277" fill="#334155" font-size="8.5" font-weight="600" text-anchor="middle">[ Demo: Admin ]</text>
+          <rect x="385" y="260" width="145" height="26" fill="#e2e8f0" stroke="#94a3b8" stroke-width="1" rx="2"/>
+          <text x="457" y="277" fill="#334155" font-size="8.5" font-weight="600" text-anchor="middle">[ Demo: Kasir ]</text>
+          <rect x="230" y="298" width="300" height="34" fill="#0f172a" stroke="#0f172a" stroke-width="1" rx="2"/>
+          <text x="380" y="320" fill="#ffffff" font-size="10.5" font-weight="bold" text-anchor="middle">MASUK KE SISTEM &rarr;</text>
+          <text x="380" y="355" fill="#64748b" font-size="8.5" text-anchor="middle">SMK Muhammadiyah 1 Bantul &bull; RPL</text>
+        </svg>
+      </div>
+
+      <div class="screenshot-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: #166534; margin-bottom: 4px; text-transform: uppercase;">B. Tangkapan Layar Asli (Aplikasi Nyata)</div>
+        <img src="screenshots/halaman_login.png" alt="Tangkapan Layar Asli Halaman Login KafeJawa POS" style="max-height: 80mm; width: auto; margin: 0 auto;">
+      </div>
+    </div>
+    <div class="wireframe-caption" style="text-align: center; margin-bottom: 10px;">Gambar 8.1: Perbandingan Wireframe Blueprint vs Tangkapan Layar Asli Halaman Login</div>
+
+    <table class="data-table avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 22%;">Nama Komponen</th>
+          <th style="width: 23%;">Tipe Elemen</th>
+          <th style="width: 32%;">Fungsi &amp; Logika Sistem</th>
+          <th style="width: 18%;">Validasi &amp; Akses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Input Email</strong></td>
+          <td>Form Field (<code>email</code>)</td>
+          <td>Menerima alamat email akun pengguna terdaftar untuk lookup identitas kredensial pada database.</td>
+          <td>Wajib diisi (<code>required</code>), format email RFC 5322.<br><span class="badge badge-muted">Semua Aktor</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Input Password</strong></td>
+          <td>Form Field (<code>password</code>)</td>
+          <td>Menerima kata sandi akun pengguna untuk diverifikasi terhadap hash Bcrypt pada tabel <code>users</code>.</td>
+          <td>Wajib diisi (<code>required</code>), masking teks keamanan rahasia.<br><span class="badge badge-muted">Semua Aktor</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Tombol Demo Admin</strong></td>
+          <td>Action Button (Wire)</td>
+          <td>Mengisi formulir secara otomatis dengan kredensial Administrator (<code>admin@kafejawa.local</code> / <code>admin123</code>).</td>
+          <td>Event JavaScript auto-fill formulir pengujian.<br><span class="badge badge-role">Admin Demo</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Tombol Demo Kasir</strong></td>
+          <td>Action Button (Wire)</td>
+          <td>Mengisi formulir secara otomatis dengan kredensial Kasir (<code>kasir@kafejawa.local</code> / <code>kasir123</code>).</td>
+          <td>Event JavaScript auto-fill formulir pengujian.<br><span class="badge badge-role">Kasir Demo</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Tombol Masuk Sistem</strong></td>
+          <td>Submit Button (Primary)</td>
+          <td>Mengirimkan payload HTTP POST ke <code>/login</code> dengan validasi sesi terenkripsi dan proteksi token CSRF.</td>
+          <td>Validasi kredensial; redirect ke Beranda jika admin atau ke POS jika kasir.<br><span class="badge badge-muted">Semua Aktor</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 8.2 BERANDA / DASHBOARD -->
+    <h3 class="subsection-title page-break">8.2 Halaman Beranda (Dashboard Manajemen Administrator)</h3>
+    <p>Halaman beranda administrator menyajikan visualisasi KPI finansial omzet, pemantauan stok menipis, dan riwayat transaksi terkini.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0;" class="avoid-break">
+      <div class="wireframe-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: var(--color-primary); margin-bottom: 4px; text-transform: uppercase;">A. Wireframe Blueprint</div>
+        <svg viewBox="0 0 760 480" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+          <rect x="0" y="0" width="760" height="480" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="3"/>
+          <rect x="0" y="0" width="760" height="32" fill="#0f172a" rx="3"/>
+          <circle cx="18" cy="16" r="5" fill="#ef4444"/><circle cx="34" cy="16" r="5" fill="#f59e0b"/><circle cx="50" cy="16" r="5" fill="#10b981"/>
+          <text x="70" y="20" fill="#94a3b8" font-size="11" font-family="monospace">wireframe://kafejawa/admin/dashboard</text>
+          <rect x="0" y="32" width="160" height="448" fill="#1e293b"/>
+          <text x="80" y="55" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">KAFEJAWA POS</text>
+          <rect x="10" y="75" width="140" height="28" fill="#0f172a" stroke="#d97706" stroke-width="1.5" rx="2"/>
+          <text x="20" y="93" fill="#fbbf24" font-size="10" font-weight="bold">&bull; Beranda (Aktif)</text>
+          <rect x="10" y="110" width="140" height="26" fill="none" stroke="#334155" stroke-width="1" rx="2"/>
+          <text x="20" y="127" fill="#cbd5e1" font-size="10">&bull; Kategori Menu</text>
+          <rect x="10" y="142" width="140" height="26" fill="none" stroke="#334155" stroke-width="1" rx="2"/>
+          <text x="20" y="159" fill="#cbd5e1" font-size="10">&bull; Produk &amp; Stok</text>
+          <rect x="10" y="174" width="140" height="26" fill="none" stroke="#334155" stroke-width="1" rx="2"/>
+          <text x="20" y="191" fill="#cbd5e1" font-size="10">&bull; Pengguna Kasir</text>
+          <rect x="10" y="206" width="140" height="26" fill="none" stroke="#334155" stroke-width="1" rx="2"/>
+          <text x="20" y="223" fill="#cbd5e1" font-size="10">&bull; Laporan Omzet</text>
+
+          <text x="180" y="60" fill="#0f172a" font-size="15" font-weight="bold">BERANDA / DASHBOARD</text>
+          <rect x="180" y="80" width="130" height="55" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <text x="190" y="97" fill="#64748b" font-size="8.5">Omzet Hari Ini</text>
+          <text x="190" y="116" fill="#0f172a" font-size="12" font-weight="bold">Rp 1.450.000</text>
+          
+          <rect x="325" y="80" width="130" height="55" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <text x="335" y="97" fill="#64748b" font-size="8.5">Transaksi Hari Ini</text>
+          <text x="335" y="116" fill="#0f172a" font-size="13" font-weight="bold">32 Nota</text>
+
+          <rect x="470" y="80" width="130" height="55" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <text x="480" y="97" fill="#64748b" font-size="8.5">Menu Siap Jual</text>
+          <text x="480" y="116" fill="#0f172a" font-size="13" font-weight="bold">12 Menu</text>
+
+          <rect x="615" y="80" width="130" height="55" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <text x="625" y="97" fill="#64748b" font-size="8.5">Total Kategori</text>
+          <text x="625" y="116" fill="#0f172a" font-size="13" font-weight="bold">3 Kategori</text>
+
+          <rect x="180" y="150" width="275" height="310" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <rect x="180" y="150" width="275" height="26" fill="#f1f5f9"/>
+          <text x="190" y="167" fill="#b45309" font-size="9.5" font-weight="bold">&bull; Peringatan Stok Menipis (&le; 10 Porsi)</text>
+          <text x="190" y="195" fill="#0f172a" font-size="9">Roti Bakar Coklat Keju (5 porsi)</text>
+          <text x="190" y="215" fill="#0f172a" font-size="9">Pisang Goreng Wijen (8 porsi)</text>
+
+          <rect x="470" y="150" width="275" height="310" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <rect x="470" y="150" width="275" height="26" fill="#f1f5f9"/>
+          <text x="480" y="167" fill="#0f172a" font-size="9.5" font-weight="bold">&bull; Riwayat Transaksi Terkini</text>
+          <text x="480" y="195" fill="#1d4ed8" font-size="9">INV-20260920-0004 - Rp 67.000</text>
+          <text x="480" y="215" fill="#1d4ed8" font-size="9">INV-20260920-0003 - Rp 45.000</text>
+        </svg>
+      </div>
+
+      <div class="screenshot-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: #166534; margin-bottom: 4px; text-transform: uppercase;">B. Tangkapan Layar Asli (Aplikasi Nyata)</div>
+        <img src="screenshots/halaman_dashboard.png" alt="Tangkapan Layar Asli Dashboard Manajemen KafeJawa" style="max-height: 80mm; width: auto; margin: 0 auto;">
+      </div>
+    </div>
+    <div class="wireframe-caption" style="text-align: center; margin-bottom: 10px;">Gambar 8.2: Perbandingan Wireframe Blueprint vs Tangkapan Layar Asli Halaman Beranda (Dashboard)</div>
+
+    <table class="data-table avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 22%;">Nama Komponen</th>
+          <th style="width: 23%;">Tipe Elemen</th>
+          <th style="width: 32%;">Fungsi &amp; Logika Sistem</th>
+          <th style="width: 18%;">Validasi &amp; Akses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Omzet Hari Ini</strong></td>
+          <td>KPI Card Widget</td>
+          <td>Menampilkan total akumulasi pendapatan kotor transaksi berstatus <code>completed</code> pada tanggal hari berjalan.</td>
+          <td>Agregasi kueri SQL <code>SUM(total_bayar)</code> dengan filter tanggal hari ini.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Transaksi Hari Ini</strong></td>
+          <td>KPI Card Widget</td>
+          <td>Menampilkan total volume faktur penjualan yang sukses diselesaikan kasir pada hari berjalan.</td>
+          <td>Agregasi kueri SQL <code>COUNT(id)</code> pada tabel <code>transactions</code> hari berjalan.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Total Menu Aktif</strong></td>
+          <td>KPI Card Widget</td>
+          <td>Menampilkan jumlah item produk berkategori aktif yang siap dijual pada katalog terminal POS kasir.</td>
+          <td>Agregasi kueri SQL <code>COUNT(id)</code> tabel <code>products</code> dengan <code>is_active = 1</code>.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Total Kategori</strong></td>
+          <td>KPI Card Widget</td>
+          <td>Menampilkan jumlah kelompok menu (Kopi, Non-Kopi, Makanan Ringan) yang aktif dalam database.</td>
+          <td>Agregasi kueri SQL <code>COUNT(id)</code> pada tabel <code>categories</code> yang aktif.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Peringatan Stok Menipis</strong></td>
+          <td>Data Table Card</td>
+          <td>Mendeteksi dan mendaftar seluruh menu dengan kuantitas sisa stok kritis (&le; 10 porsi) untuk mencegah overselling.</td>
+          <td>Kueri filter <code>stok &le; 10</code>; menampilkan badge peringatan sisa porsi.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Transaksi Terkini</strong></td>
+          <td>Data Table Card</td>
+          <td>Menampilkan daftar faktur transaksi terbaru lengkap dengan No Invoice, nama kasir, waktu, dan nominal transaksi.</td>
+          <td>Eager loading relasi <code>transactions</code> dan <code>users</code>; dilengkapi tautan cetak nota.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Navigasi Sidebar</strong></td>
+          <td>Navigation Drawer</td>
+          <td>Menu navigasi utama antarmuka untuk berpindah antar modul master data, transaksi POS, laporan, dan logout.</td>
+          <td>Dilindungi middleware RBAC (Role-Based Access Control) dan responsif drawer.<br><span class="badge badge-pk">Administrator</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 8.3 RIWAYAT TRANSAKSI -->
+    <h3 class="subsection-title page-break">8.3 Halaman Riwayat Transaksi (Kasir &amp; Audit)</h3>
+    <p>Halaman riwayat transaksi menyajikan pencatatan seluruh rekonsiliasi faktur kasir, rincian pembayaran, serta akses cetak ulang struk.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0;" class="avoid-break">
+      <div class="wireframe-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: var(--color-primary); margin-bottom: 4px; text-transform: uppercase;">A. Wireframe Blueprint</div>
+        <svg viewBox="0 0 760 460" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif">
+          <rect x="0" y="0" width="760" height="460" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="3"/>
+          <rect x="0" y="0" width="760" height="32" fill="#0f172a" rx="3"/>
+          <circle cx="18" cy="16" r="5" fill="#ef4444"/><circle cx="34" cy="16" r="5" fill="#f59e0b"/><circle cx="50" cy="16" r="5" fill="#10b981"/>
+          <text x="70" y="20" fill="#94a3b8" font-size="11" font-family="monospace">wireframe://kafejawa/pos/history</text>
+          <text x="25" y="60" fill="#0f172a" font-size="15" font-weight="bold">RIWAYAT TRANSAKSI</text>
+          <rect x="25" y="80" width="200" height="26" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <text x="35" y="97" fill="#94a3b8" font-size="9">[ 🔍 Cari No. Invoice... ]</text>
+          <rect x="25" y="115" width="710" height="280" fill="#ffffff" stroke="#94a3b8" rx="2"/>
+          <rect x="25" y="115" width="710" height="28" fill="#0f172a"/>
+          <text x="35" y="133" fill="#ffffff" font-size="9" font-weight="bold">NO. INVOICE</text>
+          <text x="180" y="133" fill="#ffffff" font-size="9" font-weight="bold">WAKTU</text>
+          <text x="315" y="133" fill="#ffffff" font-size="9" font-weight="bold">KASIR</text>
+          <text x="420" y="133" fill="#ffffff" font-size="9" font-weight="bold">TOTAL</text>
+          <text x="535" y="133" fill="#ffffff" font-size="9" font-weight="bold">DETAIL BAYAR</text>
+          <text x="660" y="133" fill="#ffffff" font-size="9" font-weight="bold">AKSI</text>
+
+          <text x="35" y="160" fill="#1d4ed8" font-size="9">INV-20260920-0004</text>
+          <text x="180" y="160" fill="#475569" font-size="8.5">20/09/2026 19:45</text>
+          <text x="315" y="160" fill="#0f172a" font-size="8.5">Budi Santoso</text>
+          <text x="420" y="160" fill="#0f172a" font-size="9" font-weight="bold">Rp 67.000</text>
+          <text x="535" y="160" fill="#475569" font-size="8">Bayar: 100k (Kbl: 33k)</text>
+          <rect x="655" y="148" width="65" height="18" fill="#e2e8f0" rx="2"/>
+          <text x="687" y="161" fill="#0f172a" font-size="8" text-anchor="middle">[Cetak]</text>
+
+          <text x="35" y="190" fill="#1d4ed8" font-size="9">INV-20260920-0003</text>
+          <text x="180" y="190" fill="#475569" font-size="8.5">20/09/2026 18:20</text>
+          <text x="315" y="190" fill="#0f172a" font-size="8.5">Budi Santoso</text>
+          <text x="420" y="190" fill="#0f172a" font-size="9" font-weight="bold">Rp 45.000</text>
+          <text x="535" y="190" fill="#475569" font-size="8">Bayar: 50k (Kbl: 5k)</text>
+          <rect x="655" y="178" width="65" height="18" fill="#e2e8f0" rx="2"/>
+          <text x="687" y="191" fill="#0f172a" font-size="8" text-anchor="middle">[Cetak]</text>
+
+          <text x="35" y="220" fill="#1d4ed8" font-size="9">INV-20260920-0002</text>
+          <text x="180" y="220" fill="#475569" font-size="8.5">20/09/2026 16:10</text>
+          <text x="315" y="220" fill="#0f172a" font-size="8.5">Budi Santoso</text>
+          <text x="420" y="220" fill="#0f172a" font-size="9" font-weight="bold">Rp 38.000</text>
+          <text x="535" y="220" fill="#475569" font-size="8">Bayar: 50k (Kbl: 12k)</text>
+          <rect x="655" y="208" width="65" height="18" fill="#e2e8f0" rx="2"/>
+          <text x="687" y="221" fill="#0f172a" font-size="8" text-anchor="middle">[Cetak]</text>
+
+          <rect x="25" y="360" width="710" height="35" fill="#f8fafc"/>
+          <text x="40" y="382" fill="#64748b" font-size="8.5">Menampilkan 1-10 dari 42 transaksi</text>
+          <text x="670" y="382" fill="#0f172a" font-size="8.5">&lt; 1 [2] 3 &gt;</text>
+        </svg>
+      </div>
+
+      <div class="screenshot-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: #166534; margin-bottom: 4px; text-transform: uppercase;">B. Tangkapan Layar Asli (Aplikasi Nyata)</div>
+        <img src="screenshots/halaman_riwayat.png" alt="Tangkapan Layar Asli Riwayat Transaksi KafeJawa" style="max-height: 80mm; width: auto; margin: 0 auto;">
+      </div>
+    </div>
+    <div class="wireframe-caption" style="text-align: center; margin-bottom: 10px;">Gambar 8.3: Perbandingan Wireframe Blueprint vs Tangkapan Layar Asli Halaman Riwayat Transaksi</div>
+
+    <table class="data-table avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 22%;">Nama Komponen</th>
+          <th style="width: 23%;">Tipe Elemen</th>
+          <th style="width: 32%;">Fungsi &amp; Logika Sistem</th>
+          <th style="width: 18%;">Validasi &amp; Akses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>No. Invoice</strong></td>
+          <td>Data Column (Kode Unik)</td>
+          <td>Menampilkan nomor identifikasi transaksi berformat <code>INV-YYYYMMDD-XXXX</code> sebagai referensi pelacakan audit.</td>
+          <td>Nilai unik terindeks (<code>UNIQUE KEY</code>) pada tabel <code>transactions</code>.<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Tanggal &amp; Waktu</strong></td>
+          <td>Data Column (Timestamp)</td>
+          <td>Menampilkan waktu presisi penyelesaian transaksi kasir dengan format <code>DD/MM/YYYY HH:MM</code>.</td>
+          <td>Bersumber dari kolom <code>created_at</code> database tersinkronisasi zona waktu WIB.<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Kasir Bertugas</strong></td>
+          <td>Data Column (Akuntabilitas)</td>
+          <td>Menampilkan nama kasir yang mengoperasikan transaksi dan menerima pembayaran pelanggan.</td>
+          <td>Relasi foreign key <code>transactions.user_id</code> menuju master <code>users.name</code>.<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Total Belanja</strong></td>
+          <td>Data Column (Nominal)</td>
+          <td>Menampilkan total tagihan belanja hasil kalkulasi subtotal seluruh item menu yang dipesan.</td>
+          <td>Tipe data <code>DECIMAL(12,2)</code> dengan format mata uang rupiah (<code>Rp xx.xxx</code>).<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Uang Diterima &amp; Kembalian</strong></td>
+          <td>Data Column (Finansial)</td>
+          <td>Menampilkan nominal uang tunai yang diserahkan pelanggan serta uang kembalian yang diberikan kasir.</td>
+          <td>Tervalidasi pada saat proses transaksi kasir (uang diterima &ge; total belanja).<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Tombol Cetak Nota Ulang</strong></td>
+          <td>Action Button (Wire)</td>
+          <td>Membuka tampilan cetak struk kasir termal (<code>/pos/receipt/{id}</code>) pada tab baru untuk dicetak ulang.</td>
+          <td>Layout format termal 58mm/80mm siap cetak melalui dialog cetak browser.<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Pagination Navigasi</strong></td>
+          <td>Paginator Bar</td>
+          <td>Membagi volume data transaksi menjadi beberapa halaman (10-15 per halaman) agar waktu respon cepat.</td>
+          <td>Paginasi native Laravel dengan navigasi tombol halaman dan query filter.<br><span class="badge badge-muted">Admin &amp; Kasir</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 8.4 STRUK BELANJA -->
+    <h3 class="subsection-title page-break">8.4 Wireframe &amp; Format Cetak Struk Belanja Kasir (Thermal Receipt)</h3>
+    <p>Struk belanja kasir dirancang dengan format kompak thermal paper 80mm / 58mm untuk kecepatan pencetakan nota fisik.</p>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 10px 0;" class="avoid-break">
+      <div class="wireframe-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: var(--color-primary); margin-bottom: 4px; text-transform: uppercase;">A. Wireframe Blueprint</div>
+        <svg viewBox="0 0 760 520" xmlns="http://www.w3.org/2000/svg" font-family="-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, monospace">
+          <rect x="0" y="0" width="760" height="520" fill="#f8fafc" stroke="#cbd5e1" stroke-width="1.5" rx="3"/>
+          <rect x="0" y="0" width="760" height="32" fill="#0f172a" rx="3"/>
+          <circle cx="18" cy="16" r="5" fill="#ef4444"/><circle cx="34" cy="16" r="5" fill="#f59e0b"/><circle cx="50" cy="16" r="5" fill="#10b981"/>
+          <text x="70" y="20" fill="#94a3b8" font-size="11" font-family="monospace">wireframe://kafejawa/pos/receipt/thermal-preview</text>
+
+          <rect x="220" y="55" width="320" height="450" fill="#ffffff" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="3,3" rx="2"/>
+          <text x="380" y="80" fill="#000000" font-size="12" font-weight="bold" text-anchor="middle">*** KAFEJAWA CAFE ***</text>
+          <text x="380" y="93" fill="#333333" font-size="8" text-anchor="middle">Jl. Pemuda No. 45, Bantul, D.I. Yogyakarta</text>
+          <line x1="230" y1="102" x2="530" y2="102" stroke="#000000" stroke-dasharray="2,2"/>
+          
+          <text x="235" y="118" fill="#000000" font-size="8">No. Inv : INV-20260920-0042</text>
+          <text x="235" y="130" fill="#000000" font-size="8">Tanggal : 20/09/2026 19:45 WIB</text>
+          <text x="235" y="142" fill="#000000" font-size="8">Kasir   : Budi Santoso</text>
+          <line x1="230" y1="150" x2="530" y2="150" stroke="#000000" stroke-dasharray="2,2"/>
+
+          <text x="235" y="165" fill="#000000" font-size="8" font-weight="bold">ITEM PESANAN</text>
+          <text x="525" y="165" fill="#000000" font-size="8" font-weight="bold" text-anchor="end">TOTAL</text>
+
+          <text x="235" y="180" fill="#000000" font-size="8">2x Kopi Susu Gula Aren</text>
+          <text x="525" y="180" fill="#000000" font-size="8" text-anchor="end">36.000</text>
+          <text x="235" y="195" fill="#000000" font-size="8">1x Manual Brew V60</text>
+          <text x="525" y="195" fill="#000000" font-size="8" text-anchor="end">22.000</text>
+          <text x="235" y="210" fill="#000000" font-size="8">1x Pisang Goreng Keju</text>
+          <text x="525" y="210" fill="#000000" font-size="8" text-anchor="end">15.000</text>
+          <line x1="230" y1="220" x2="530" y2="220" stroke="#000000" stroke-dasharray="2,2"/>
+
+          <text x="235" y="238" fill="#000000" font-size="8.5">Total Qty : 4 Item</text>
+          <text x="235" y="255" fill="#000000" font-size="9" font-weight="bold">TOTAL BELANJA :</text>
+          <text x="525" y="255" fill="#000000" font-size="10" font-weight="bold" text-anchor="end">Rp 73.000</text>
+
+          <text x="235" y="272" fill="#000000" font-size="8">Tunai : Rp 100.000</text>
+          <text x="235" y="287" fill="#000000" font-size="8.5" font-weight="bold">KEMBALIAN : Rp 27.000</text>
+          <line x1="230" y1="298" x2="530" y2="298" stroke="#000000" stroke-dasharray="2,2"/>
+
+          <text x="380" y="318" fill="#000000" font-size="7.5" text-anchor="middle">Terima Kasih Atas Kunjungan Anda!</text>
+          <text x="380" y="330" fill="#333333" font-size="7" text-anchor="middle">WiFi: kafejawa-guest &bull; PW: kopienak123</text>
+        </svg>
+      </div>
+
+      <div class="screenshot-box" style="margin: 0;">
+        <div style="font-size: 8pt; font-weight: bold; color: #166534; margin-bottom: 4px; text-transform: uppercase;">B. Tangkapan Layar Asli (Aplikasi Nyata)</div>
+        <img src="screenshots/halaman_struk.png" alt="Tangkapan Layar Asli Struk Belanja KafeJawa" style="max-height: 80mm; width: auto; margin: 0 auto;">
+      </div>
+    </div>
+    <div class="wireframe-caption" style="text-align: center; margin-bottom: 10px;">Gambar 8.4: Perbandingan Wireframe Blueprint vs Tangkapan Layar Asli Format Struk Belanja</div>
+
+    <table class="data-table avoid-break">
+      <thead>
+        <tr>
+          <th style="width: 5%;">No</th>
+          <th style="width: 22%;">Nama Komponen</th>
+          <th style="width: 23%;">Tipe Elemen</th>
+          <th style="width: 32%;">Fungsi &amp; Logika Sistem</th>
+          <th style="width: 18%;">Validasi &amp; Akses</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Header Identitas Kafe</strong></td>
+          <td>Text Header (Center)</td>
+          <td>Menampilkan nama gerai, alamat cabang, kontak, dan akun media sosial resmi.</td>
+          <td>Format cetak teks termal rata tengah.<br><span class="badge badge-muted">Publik</span></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Metadata Faktur</strong></td>
+          <td>Meta Section (Key-Value)</td>
+          <td>Mencatat No. Invoice unik, tanggal &amp; waktu transaksi, serta nama operator kasir bertugas.</td>
+          <td>Kunci relasi transaksi kasir untuk audit fisik.<br><span class="badge badge-muted">Kasir &amp; Pelanggan</span></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Daftar Item Belanjaan</strong></td>
+          <td>Itemized List (Baris)</td>
+          <td>Menyajikan rincian nama produk, kuantitas beli, harga satuan, dan subtotal per item.</td>
+          <td>Snapshot harga saat transaksi berlangsung.<br><span class="badge badge-muted">Kasir &amp; Pelanggan</span></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Total &amp; Kalkulasi Bayar</strong></td>
+          <td>Summary Math Section</td>
+          <td>Menampilkan akumulasi nilai belanja, uang tunai diterima, dan uang kembalian pembeli.</td>
+          <td>Presisi desimal fixed-point tanpa pembulatan liar.<br><span class="badge badge-muted">Kasir &amp; Pelanggan</span></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Footer &amp; Pesan Penutup</strong></td>
+          <td>Notice Section</td>
+          <td>Menampilkan pesan terima kasih, informasi fasilitas WiFi kafe, dan status keabsahan struk.</td>
+          <td>Penutup resmi bukti pembayaran fisik pelanggan.<br><span class="badge badge-muted">Publik</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+<div class="section-block page-break">
+    <div class="section-header">
+      <div>
+        <span class="section-number">9.</span>
+        <span class="section-title">LAMPIRAN SCRIPT SQL DDL (SCHEMA.SQL)</span>
+      </div>
+    </div>
+
+    <p>Berikut adalah naskah lengkap DDL (Data Definition Language) SQL standar MySQL 8.0+ / MariaDB yang tersimpan pada berkas <code>docs/schema.sql</code>. Seluruh perintah dibuat mandiri (self-documenting) tanpa komentar konversasional AI slop:</p>
+
+    <div class="code-box">CREATE DATABASE IF NOT EXISTS kafejawa
+    DEFAULT CHARACTER SET utf8mb4
+    DEFAULT COLLATE utf8mb4_unicode_ci;
+
+USE kafejawa;
+
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS transaction_details;
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS products;
+DROP TABLE IF EXISTS categories;
+DROP TABLE IF EXISTS users;
+SET FOREIGN_KEY_CHECKS = 1;
+
+CREATE TABLE users (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role ENUM('admin', 'kasir') NOT NULL DEFAULT 'kasir',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE categories (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL UNIQUE,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE products (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    category_id BIGINT UNSIGNED NOT NULL,
+    name VARCHAR(150) NOT NULL,
+    sku VARCHAR(50) NOT NULL UNIQUE,
+    price DECIMAL(12, 2) NOT NULL,
+    cost_price DECIMAL(12, 2) NOT NULL DEFAULT 0.00,
+    stock INT NOT NULL DEFAULT 0,
+    is_active BOOLEAN NOT NULL DEFAULT TRUE,
+    image VARCHAR(255) NULL DEFAULT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    INDEX idx_products_category_id (category_id),
+    CONSTRAINT fk_products_category_id FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE transactions (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    invoice_number VARCHAR(50) NOT NULL UNIQUE,
+    user_id BIGINT UNSIGNED NOT NULL,
+    total_amount DECIMAL(12, 2) NOT NULL,
+    pay_amount DECIMAL(12, 2) NOT NULL,
+    change_amount DECIMAL(12, 2) NOT NULL,
+    payment_method ENUM('cash', 'qris', 'transfer') NOT NULL DEFAULT 'cash',
+    status ENUM('completed', 'canceled') NOT NULL DEFAULT 'completed',
+    notes TEXT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    deleted_at TIMESTAMP NULL DEFAULT NULL,
+    INDEX idx_transactions_user_id (user_id),
+    INDEX idx_transactions_created_at (created_at),
+    CONSTRAINT fk_transactions_user_id FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE transaction_details (
+    id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    transaction_id BIGINT UNSIGNED NOT NULL,
+    product_id BIGINT UNSIGNED NOT NULL,
+    quantity INT NOT NULL,
+    unit_price DECIMAL(12, 2) NOT NULL,
+    subtotal DECIMAL(12, 2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_details_transaction_id (transaction_id),
+    INDEX idx_details_product_id (product_id),
+    CONSTRAINT fk_details_transaction_id FOREIGN KEY (transaction_id) REFERENCES transactions(id) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT fk_details_product_id FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE RESTRICT ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;</div>
+
+    <div class="info-banner" style="margin-top: 15px;">
+      <strong>Pengesahan Dokumen Teknis:</strong> Dokumen perancangan Tahap 1 ini telah diverifikasi memenuhi seluruh persyaratan fungsional, prinsip arsitektur perangkat lunak RPL, serta kaidah integritas basis data relasional.
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

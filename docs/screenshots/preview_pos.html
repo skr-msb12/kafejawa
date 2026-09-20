@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="MtmFY6JVL9Ugg9fsrZe58XQFmGUt13mkCILjLdjU">
+    <title>Kasir Terminal POS - KafeJawa POS</title>
+    <link rel="stylesheet" href="file:///C:/Users/MSI/.gemini/antigravity/scratch/kafejawa/public/css/app.css">
+</head>
+<body>
+    <div class="pos-layout">
+        <div class="pos-main">
+            <header class="pos-topbar">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="sidebar-brand-icon" style="width: 26px; height: 26px; font-size: 13px;">KJ</div>
+                    <span style="font-weight: 700; font-size: 15px; letter-spacing: 0.5px;">KafeJawa POS</span>
+                    <span style="font-size: 12px; color: #94a3b8; margin-left: 6px;"><span class="pos-operator-text">Operator: </span><strong>Kasir KafeJawa</strong> (kasir)</span>
+                </div>
+                <div class="pos-topbar-actions" style="display: flex; align-items: center; gap: 8px;">
+                    <a href="http://127.0.0.1:8000/pos/history" class="btn btn-secondary btn-sm" style="background: #1e293b; color: #f8fafc; border-color: #334155;" title="Riwayat Penjualan">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>Riwayat Penjualan</span>
+                    </a>
+                                        <form action="http://127.0.0.1:8000/logout" method="POST" style="margin: 0;">
+                        <input type="hidden" name="_token" value="MtmFY6JVL9Ugg9fsrZe58XQFmGUt13mkCILjLdjU" autocomplete="off">                        <button type="submit" class="btn btn-danger btn-sm" title="Keluar">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                            <span>Keluar</span>
+                        </button>
+                    </form>
+                </div>
+            </header>
+
+            <div style="flex: 1; display: flex; flex-direction: column; overflow: hidden;">
+                
+                
+                <div class="pos-catalog-area">
+    <div class="pos-controls">
+        <input type="text" id="productSearchInput" class="pos-search-input" placeholder="Cari menu kopi atau makanan (Ketik untuk mencari)..." autofocus>
+    </div>
+
+    <div class="category-filter-list">
+        <button type="button" class="cat-btn active" data-category="all" onclick="filterCategory('all', this)">
+            Semua Menu
+        </button>
+                    <button type="button" class="cat-btn" data-category="1" onclick="filterCategory('1', this)">
+                Kopi
+            </button>
+                    <button type="button" class="cat-btn" data-category="3" onclick="filterCategory('3', this)">
+                Makanan Ringan
+            </button>
+                    <button type="button" class="cat-btn" data-category="2" onclick="filterCategory('2', this)">
+                Non-Kopi
+            </button>
+            </div>
+
+    <div class="product-grid-wrapper">
+        <div class="product-grid" id="productGrid">
+                            <div class="pos-product-card "
+                     data-id="2"
+                     data-name="Americano"
+                     data-price="18000"
+                     data-stock="45"
+                     data-category="1"
+                     onclick="addToCart(2, 'Americano', 18000, 45)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/americano.jpg" alt="Americano">
+                                                <span class="pos-stock-badge ">
+                            45 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Americano</div>
+                        <div class="pos-card-price">Rp 18.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="5"
+                     data-name="Cappuccino"
+                     data-price="24000"
+                     data-stock="40"
+                     data-category="1"
+                     onclick="addToCart(5, 'Cappuccino', 24000, 40)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/cappuccino.jpg" alt="Cappuccino">
+                                                <span class="pos-stock-badge ">
+                            40 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Cappuccino</div>
+                        <div class="pos-card-price">Rp 24.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="4"
+                     data-name="Caramel Macchiato"
+                     data-price="26000"
+                     data-stock="35"
+                     data-category="1"
+                     onclick="addToCart(4, 'Caramel Macchiato', 26000, 35)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/caramel-macchiato.jpg" alt="Caramel Macchiato">
+                                                <span class="pos-stock-badge ">
+                            35 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Caramel Macchiato</div>
+                        <div class="pos-card-price">Rp 26.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="7"
+                     data-name="Chocolate Signature"
+                     data-price="23000"
+                     data-stock="35"
+                     data-category="2"
+                     onclick="addToCart(7, 'Chocolate Signature', 23000, 35)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/chocolate-signature.jpg" alt="Chocolate Signature">
+                                                <span class="pos-stock-badge ">
+                            35 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Chocolate Signature</div>
+                        <div class="pos-card-price">Rp 23.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="8"
+                     data-name="Earl Grey Milk Tea"
+                     data-price="22000"
+                     data-stock="25"
+                     data-category="2"
+                     onclick="addToCart(8, 'Earl Grey Milk Tea', 22000, 25)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/earl-grey-milk-tea.jpg" alt="Earl Grey Milk Tea">
+                                                <span class="pos-stock-badge ">
+                            25 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Earl Grey Milk Tea</div>
+                        <div class="pos-card-price">Rp 22.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="1"
+                     data-name="Espresso"
+                     data-price="15000"
+                     data-stock="50"
+                     data-category="1"
+                     onclick="addToCart(1, 'Espresso', 15000, 50)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/espresso.jpg" alt="Espresso">
+                                                <span class="pos-stock-badge ">
+                            50 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Espresso</div>
+                        <div class="pos-card-price">Rp 15.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="11"
+                     data-name="Kentang Goreng"
+                     data-price="18000"
+                     data-stock="40"
+                     data-category="3"
+                     onclick="addToCart(11, 'Kentang Goreng', 18000, 40)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/kentang-goreng.jpg" alt="Kentang Goreng">
+                                                <span class="pos-stock-badge ">
+                            40 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Kentang Goreng</div>
+                        <div class="pos-card-price">Rp 18.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="3"
+                     data-name="Kopi Susu Gula Aren"
+                     data-price="22000"
+                     data-stock="50"
+                     data-category="1"
+                     onclick="addToCart(3, 'Kopi Susu Gula Aren', 22000, 50)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/kopi-susu-gula-aren.jpg" alt="Kopi Susu Gula Aren">
+                                                <span class="pos-stock-badge ">
+                            50 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Kopi Susu Gula Aren</div>
+                        <div class="pos-card-price">Rp 22.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="9"
+                     data-name="Lemon Tea"
+                     data-price="16000"
+                     data-stock="40"
+                     data-category="2"
+                     onclick="addToCart(9, 'Lemon Tea', 16000, 40)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/lemon-tea.jpg" alt="Lemon Tea">
+                                                <span class="pos-stock-badge ">
+                            40 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Lemon Tea</div>
+                        <div class="pos-card-price">Rp 16.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="6"
+                     data-name="Matcha Latte"
+                     data-price="25000"
+                     data-stock="30"
+                     data-category="2"
+                     onclick="addToCart(6, 'Matcha Latte', 25000, 30)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/matcha-latte.jpg" alt="Matcha Latte">
+                                                <span class="pos-stock-badge ">
+                            30 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Matcha Latte</div>
+                        <div class="pos-card-price">Rp 25.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="12"
+                     data-name="Pisang Goreng Wijen"
+                     data-price="17000"
+                     data-stock="35"
+                     data-category="3"
+                     onclick="addToCart(12, 'Pisang Goreng Wijen', 17000, 35)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/pisang-goreng-wijen.jpg" alt="Pisang Goreng Wijen">
+                                                <span class="pos-stock-badge ">
+                            35 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Pisang Goreng Wijen</div>
+                        <div class="pos-card-price">Rp 17.000</div>
+                    </div>
+                </div>
+                            <div class="pos-product-card "
+                     data-id="10"
+                     data-name="Roti Bakar Coklat Keju"
+                     data-price="20000"
+                     data-stock="30"
+                     data-category="3"
+                     onclick="addToCart(10, 'Roti Bakar Coklat Keju', 20000, 30)">
+                    <div class="pos-card-thumb">
+                                                    <img src="http://127.0.0.1:8000/storage/products/roti-bakar-coklat-keju.jpg" alt="Roti Bakar Coklat Keju">
+                                                <span class="pos-stock-badge ">
+                            30 porsi
+                        </span>
+                    </div>
+                    <div class="pos-card-info">
+                        <div class="pos-card-name">Roti Bakar Coklat Keju</div>
+                        <div class="pos-card-price">Rp 20.000</div>
+                    </div>
+                </div>
+                    </div>
+    </div>
+
+    <div class="mobile-cart-toggle-bar" id="mobileCartToggleBar">
+        <div class="mobile-cart-summary">
+            <span class="mobile-cart-badge" id="mobileCartCount">0 item</span>
+            <span class="mobile-cart-total" id="mobileCartTotal">Rp 0</span>
+        </div>
+        <button type="button" class="btn btn-primary btn-sm" onclick="toggleMobileCart(true)">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>Lihat Keranjang</span>
+        </button>
+    </div>
+</div>
+            </div>
+        </div>
+
+        <div class="cart-mobile-backdrop" id="cartBackdrop" onclick="toggleMobileCart(false)"></div>
+<aside class="pos-sidebar-cart" id="posSidebarCart">
+    <div class="cart-header">
+        <div class="cart-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <span>Keranjang Pesanan</span>
+            <span class="cart-count" id="cartBadge">0</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 6px;">
+            <button type="button" class="btn btn-secondary btn-sm" onclick="clearCart()" title="Kosongkan">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+            <button type="button" class="cart-close-mobile" onclick="toggleMobileCart(false)" title="Tutup Keranjang" aria-label="Tutup Keranjang">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+        </div>
+    </div>
+
+    <div class="cart-items-wrapper" id="cartItemsList">
+        <div class="cart-empty-state" id="cartEmptyState">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#cbd5e1" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 8px;"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+            <p style="font-size: 13px; font-weight: 600;">Belum ada pesanan</p>
+            <p style="font-size: 11.5px;">Klik menu di sebelah kiri untuk menambahkan</p>
+        </div>
+    </div>
+
+    <form action="http://127.0.0.1:8000/pos/checkout" method="POST" id="checkoutForm" class="cart-footer" onsubmit="return validateCheckout(event)">
+        <input type="hidden" name="_token" value="MtmFY6JVL9Ugg9fsrZe58XQFmGUt13mkCILjLdjU" autocomplete="off">        <input type="hidden" name="items" id="cartItemsPayload">
+        <input type="hidden" name="metode_bayar" id="selectedPaymentMethod" value="tunai">
+
+        <div class="cart-summary-row">
+            <span class="cart-total-label">Total Tagihan</span>
+            <span class="cart-total-value" id="cartTotalDisplay">Rp 0</span>
+        </div>
+
+        <div>
+            <label class="form-label" style="font-size: 11.5px; margin-bottom: 4px;">Metode Pembayaran</label>
+            <div class="payment-method-selector">
+                <button type="button" class="method-btn active" data-method="tunai" onclick="setPaymentMethod('tunai', this)">Tunai</button>
+                <button type="button" class="method-btn" data-method="qris" onclick="setPaymentMethod('qris', this)">QRIS</button>
+                <button type="button" class="method-btn" data-method="transfer" onclick="setPaymentMethod('transfer', this)">Transfer</button>
+            </div>
+        </div>
+
+        <div>
+            <label class="form-label" style="font-size: 11.5px; margin-bottom: 4px;">Uang Pembayaran (Rp)</label>
+            <input type="number" id="inputBayar" name="jumlah_bayar" class="form-control" placeholder="0" min="0" step="500" required oninput="calculateChange()">
+        </div>
+
+        <div class="quick-cash-grid">
+            <button type="button" class="quick-cash-btn" onclick="quickCash('exact')">Uang Pas</button>
+            <button type="button" class="quick-cash-btn" onclick="quickCash(20000)">20.000</button>
+            <button type="button" class="quick-cash-btn" onclick="quickCash(50000)">50.000</button>
+            <button type="button" class="quick-cash-btn" onclick="quickCash(100000)">100.000</button>
+        </div>
+
+        <div class="change-display">
+            <span>Kembalian</span>
+            <span class="change-value" id="changeDisplay">Rp 0</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="btnCheckout" style="padding: 12px;" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            <span>Selesaikan Transaksi</span>
+        </button>
+    </form>
+</aside>
+    </div>
+    <script>
+    let cart = [];
+    let currentCategory = 'all';
+
+    function formatRupiah(amount) {
+        return 'Rp ' + Math.round(amount).toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    }
+
+    function toggleMobileCart(open) {
+        const cartEl = document.getElementById('posSidebarCart');
+        const backdropEl = document.getElementById('cartBackdrop');
+        if (!cartEl || !backdropEl) return;
+        if (open) {
+            cartEl.classList.add('cart-mobile-open');
+            backdropEl.classList.add('active');
+        } else {
+            cartEl.classList.remove('cart-mobile-open');
+            backdropEl.classList.remove('active');
+        }
+    }
+
+    function loadCartFromStorage() {
+        try {
+            const saved = sessionStorage.getItem('kafejawa_cart');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (Array.isArray(parsed)) {
+                    cart = parsed;
+                }
+            }
+        } catch (e) {
+            cart = [];
+        }
+    }
+
+    function saveCartToStorage() {
+        try {
+            sessionStorage.setItem('kafejawa_cart', JSON.stringify(cart));
+        } catch (e) {}
+    }
+
+    function refreshCsrfToken() {
+        fetch('/csrf-token', {
+            headers: {
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(function(res) {
+            if (res.ok) {
+                return res.json();
+            }
+            throw new Error('CSRF heartbeat failed');
+        })
+        .then(function(data) {
+            if (data && data.token) {
+                const metaToken = document.querySelector('meta[name="csrf-token"]');
+                if (metaToken) {
+                    metaToken.setAttribute('content', data.token);
+                }
+                document.querySelectorAll('input[name="_token"]').forEach(function(input) {
+                    input.value = data.token;
+                });
+            }
+        })
+        .catch(function() {});
+    }
+
+    function filterCategory(catId, btn) {
+        currentCategory = catId;
+        document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyFilters();
+    }
+
+    document.getElementById('productSearchInput').addEventListener('input', function() {
+        applyFilters();
+    });
+
+    function applyFilters() {
+        const query = document.getElementById('productSearchInput').value.toLowerCase().trim();
+        const cards = document.querySelectorAll('.pos-product-card');
+
+        cards.forEach(card => {
+            const name = card.getAttribute('data-name').toLowerCase();
+            const cat = card.getAttribute('data-category');
+
+            const matchesCat = (currentCategory === 'all' || cat === currentCategory);
+            const matchesSearch = (!query || name.includes(query));
+
+            if (matchesCat && matchesSearch) {
+                card.style.display = 'flex';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    function addToCart(id, name, price, stock) {
+        if (stock <= 0) {
+            alert('Maaf, stok menu ini sudah habis.');
+            return;
+        }
+
+        const existing = cart.find(item => item.id === id);
+        if (existing) {
+            if (existing.qty >= stock) {
+                alert('Jumlah melebihi stok yang tersedia (' + stock + ' porsi).');
+                return;
+            }
+            existing.qty += 1;
+        } else {
+            cart.push({
+                id: id,
+                name: name,
+                price: price,
+                stock: stock,
+                qty: 1
+            });
+        }
+
+        renderCart();
+    }
+
+    function updateQty(id, delta) {
+        const item = cart.find(i => i.id === id);
+        if (!item) return;
+
+        const newQty = item.qty + delta;
+        if (newQty <= 0) {
+            cart = cart.filter(i => i.id !== id);
+        } else if (newQty > item.stock) {
+            alert('Jumlah melebihi stok tersedia (' + item.stock + ' porsi).');
+            return;
+        } else {
+            item.qty = newQty;
+        }
+
+        renderCart();
+    }
+
+    function removeItem(id) {
+        cart = cart.filter(i => i.id !== id);
+        renderCart();
+    }
+
+    function clearCart() {
+        if (cart.length === 0) return;
+        if (confirm('Kosongkan semua pesanan dalam keranjang?')) {
+            cart = [];
+            try {
+                sessionStorage.removeItem('kafejawa_cart');
+            } catch (e) {}
+            renderCart();
+        }
+    }
+
+    function getCartTotal() {
+        return cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+    }
+
+    function renderCart() {
+        saveCartToStorage();
+
+        const container = document.getElementById('cartItemsList');
+        const emptyState = document.getElementById('cartEmptyState');
+        const badge = document.getElementById('cartBadge');
+        const totalDisplay = document.getElementById('cartTotalDisplay');
+        const btnCheckout = document.getElementById('btnCheckout');
+        const payloadInput = document.getElementById('cartItemsPayload');
+        const mobileBadge = document.getElementById('mobileCartCount');
+        const mobileTotal = document.getElementById('mobileCartTotal');
+
+        const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+        badge.innerText = totalItems;
+        if (mobileBadge) {
+            mobileBadge.innerText = totalItems + ' item';
+        }
+
+        if (cart.length === 0) {
+            container.innerHTML = '';
+            container.appendChild(emptyState);
+            emptyState.style.display = 'flex';
+            totalDisplay.innerText = 'Rp 0';
+            if (mobileTotal) {
+                mobileTotal.innerText = 'Rp 0';
+            }
+            btnCheckout.disabled = true;
+            payloadInput.value = '';
+            document.getElementById('inputBayar').value = '';
+            calculateChange();
+            return;
+        }
+
+        emptyState.style.display = 'none';
+        container.innerHTML = '';
+
+        cart.forEach(item => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'cart-item';
+            const subtotal = item.price * item.qty;
+
+            itemDiv.innerHTML = `
+                <div class="cart-item-details">
+                    <div class="cart-item-name" title="${item.name}">${item.name}</div>
+                    <div class="cart-item-price">${formatRupiah(item.price)}</div>
+                </div>
+                <div class="cart-item-qty">
+                    <button type="button" class="qty-btn" onclick="updateQty(${item.id}, -1)">&minus;</button>
+                    <span class="qty-val">${item.qty}</span>
+                    <button type="button" class="qty-btn" onclick="updateQty(${item.id}, 1)">&plus;</button>
+                </div>
+                <div class="cart-item-subtotal">${formatRupiah(subtotal)}</div>
+                <button type="button" onclick="removeItem(${item.id})" style="background:none; border:none; color:var(--danger); cursor:pointer; padding:2px;" title="Hapus">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                </button>
+            `;
+            container.appendChild(itemDiv);
+        });
+
+        const total = getCartTotal();
+        totalDisplay.innerText = formatRupiah(total);
+        if (mobileTotal) {
+            mobileTotal.innerText = formatRupiah(total);
+        }
+        btnCheckout.disabled = false;
+        payloadInput.value = JSON.stringify(cart);
+
+        calculateChange();
+    }
+
+    function setPaymentMethod(method, btn) {
+        document.getElementById('selectedPaymentMethod').value = method;
+        document.querySelectorAll('.method-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        if (method === 'qris' || method === 'transfer') {
+            quickCash('exact');
+        }
+    }
+
+    function quickCash(val) {
+        const total = getCartTotal();
+        if (total <= 0) return;
+
+        let amount = 0;
+        if (val === 'exact') {
+            amount = total;
+        } else {
+            amount = val;
+        }
+
+        document.getElementById('inputBayar').value = amount;
+        calculateChange();
+    }
+
+    function calculateChange() {
+        const total = getCartTotal();
+        const inputVal = parseFloat(document.getElementById('inputBayar').value) || 0;
+        const changeEl = document.getElementById('changeDisplay');
+
+        if (inputVal >= total && total > 0) {
+            const change = inputVal - total;
+            changeEl.innerText = formatRupiah(change);
+            changeEl.style.color = 'var(--success)';
+        } else if (total > 0 && inputVal > 0) {
+            const diff = total - inputVal;
+            changeEl.innerText = 'Kurang ' + formatRupiah(diff);
+            changeEl.style.color = 'var(--danger)';
+        } else {
+            changeEl.innerText = 'Rp 0';
+            changeEl.style.color = 'var(--text-main)';
+        }
+    }
+
+    function validateCheckout(e) {
+        if (cart.length === 0) {
+            alert('Keranjang pesanan masih kosong.');
+            return false;
+        }
+
+        const total = getCartTotal();
+        const bayar = parseFloat(document.getElementById('inputBayar').value) || 0;
+
+        if (bayar < total) {
+            alert('Jumlah uang pembayaran tidak mencukupi total tagihan.');
+            document.getElementById('inputBayar').focus();
+            return false;
+        }
+
+        try {
+            sessionStorage.removeItem('kafejawa_cart');
+        } catch (e) {}
+
+        return true;
+    }
+
+    setInterval(refreshCsrfToken, 10 * 60 * 1000);
+    window.addEventListener('focus', refreshCsrfToken);
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            toggleMobileCart(false);
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+                    loadCartFromStorage();
+                renderCart();
+        refreshCsrfToken();
+    });
+</script>
+</body>
+</html>

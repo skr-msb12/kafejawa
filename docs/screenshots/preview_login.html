@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masuk - KafeJawa POS</title>
+    <link rel="stylesheet" href="file:///C:/Users/MSI/.gemini/antigravity/scratch/kafejawa/public/css/app.css">
+</head>
+<body class="login-page">
+    <div class="login-card">
+        <div class="login-header">
+            <div class="login-logo">KJ</div>
+            <div class="login-title">KafeJawa POS</div>
+            <div class="login-subtitle">Sistem Point of Sale & Manajemen Kafe</div>
+        </div>
+
+        <div class="login-body">
+            
+            
+            
+            <form action="http://127.0.0.1:8000/login" method="POST" id="loginForm">
+                <input type="hidden" name="_token" value="3HexvgBL5ICfttRDGM7UYhn5AqVuhu2SjojjO9wh" autocomplete="off">                <div class="form-group">
+                    <label class="form-label" for="email">Alamat Email</label>
+                    <input type="email" id="email" name="email" class="form-control" value="" required autofocus autocomplete="username">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">Kata Sandi</label>
+                    <input type="password" id="password" name="password" class="form-control" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                    <label style="display: flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; color: #475569;">
+                        <input type="checkbox" name="remember" style="accent-color: var(--accent);">
+                        <span>Ingat saya di perangkat ini</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block btn-lg">
+                    <span>Masuk ke Sistem</span>
+                </button>
+            </form>
+
+            <div class="demo-login-box">
+                <div class="demo-login-title">Akses Akun Demo Cepat</div>
+                <div class="demo-buttons">
+                    <button type="button" class="btn btn-secondary btn-block" onclick="fillAndSubmit('admin@kafejawa.local', 'admin123')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        <span>Login Admin</span>
+                    </button>
+                    <button type="button" class="btn btn-secondary btn-block" onclick="fillAndSubmit('kasir@kafejawa.local', 'kasir123')">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg>
+                        <span>Login Kasir</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function fillAndSubmit(email, password) {
+            document.getElementById('email').value = email;
+            document.getElementById('password').value = password;
+            document.getElementById('loginForm').submit();
+        }
+    </script>
+</body>
+</html>
